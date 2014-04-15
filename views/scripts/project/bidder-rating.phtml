@@ -1,0 +1,100 @@
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/star-rating/jquery-1.4.2.min.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/star-rating/documentation.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/star-rating/jquery.MetaData.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/star-rating/jquery.rating.js')) ?>
+<?php $this->headLink()->appendStylesheet($this->baseUrl('scripts/star-rating/jquery.rating.css')) ?>
+
+<div class="projects" id="container">
+    <div style="width:920px;" class="main_box left members_list project_list member_project">
+        <h3 class="left">FREELANCER FEEDBACK FOR (<?php echo $this->projectOwnerUser->getProjectTitle();?>)</h3>
+        <div class="search_area right">
+            <form name="job_search_Frm" method="post" action="<?php echo $this->baseUrl('project/job_search'); ?>">
+                <input type="text" name="job_search" id="job_search" placeholder="SEARCH FOR A JOB" />
+                <a class="search_button" href="javascript:void(0);" onclick="job_search_func()"></a>
+            </form>
+        </div>
+        <div class="clear"></div>
+        <form name="given_rating_Frm" id="given_rating_Frm" method="post" action="<?php echo $this->baseUrl('project/save-bidder-rating'); ?>">
+            <input type="hidden" name="project_id" value="<?php echo $this->projectId?>">  
+            <input type="hidden" name="owner_user_id" value="<?php echo $this->ownerUserId?>">
+            <input type="hidden" name="rating" id="rating"> 
+            <label class="field_title">Project Name :	</label>
+            <span>
+                <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $this->projectId?>/">
+                    <?php echo $this->projectOwnerUser->getProjectTitle();?>
+                </a>
+            </span>
+            <div class="clear"></div>
+
+            <label class="field_title">Project Budget :</label><span>$<?php echo $this->projectOwnerUser->getCost();?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Project Owner :</label>
+            <span>  
+                <a href="<?php echo $this->baseUrl('account/profile'); ?>/<?php echo $this->projectOwnerUser->getProjectOwner()->getUsername()?>">
+                <?php echo $this->projectOwnerUser->getProjectOwner()->getUsername();?>
+                </a>  
+            </span>
+            <div class="clear"></div>
+
+            <label class="field_title">Appointed Freelancer :</label>
+            <span>
+                <a href="<?php echo $this->baseUrl('account/profile'); ?>/<?php echo $this->sessionUsername?>">
+                  <?php echo $this->sessionUsername?>
+                </a>
+            </span>
+            <div class="clear"></div>
+            <div style="width:100%">
+                <div style="float:left;width:17%;">
+                    <label class="field_title">Give your rating :</label> 
+                </div>
+                <div style="float:left;width:15%;">
+                    <span>
+                        <table cellspacing="5" width="100%">
+                        <tr>
+                            <td valign="top" width="180">
+                                <input name="star1" type="radio" class="star" value="1"/>
+                                <input name="star1" type="radio" class="star" value="2"/>
+                                <input name="star1" type="radio" class="star" value="3"/>
+                                <input name="star1" type="radio" class="star" value="4"/>
+                                <input name="star1" type="radio" class="star" value="5"/>
+                             </td>
+                        </tr>
+                       </table>
+                   </span>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <br>
+            <label class="field_title left">Your testimonial :</label>
+            <div class="left small_rounded text_area">
+                <textarea name="comment" id="comment" placeholder="" class="normal_input"></textarea>
+            </div>
+            <div class="clear"></div>
+            <a href="javascript:void(0);" onclick="rating_point()" class="submit_feedback">SUBMIT FEEDBACK</a>
+            <div class="clear"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+    
+    <?php echo $this->render('bottom-three-btn.phtml');?>
+    
+    <div class="clear"></div>
+</div>
+
+<?php $this->headScript()->captureStart() ?>
+
+function rating_point()
+{
+    var rating = $("input[name='star1']:checked").val();
+    var comment = document.getElementById('comment').value; 
+    if(rating == '1' || rating == '2' || rating == '3' || rating == '4' || rating == '5') {
+        $('#rating').val(rating);
+        document.forms.given_rating_Frm.submit();
+    } else {
+        alert('Please click your gaving rating!'); 
+        return false;  
+    } 
+}
+
+<?php $this->headScript()->captureEnd() ?>

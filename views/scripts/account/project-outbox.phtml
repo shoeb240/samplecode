@@ -1,0 +1,79 @@
+<?php $this->headStyle()->captureStart() ?>
+
+    .color{background-color:#ededed;}
+    .date{float:right;color:black;font-size:11px;font-style: italic;}
+    
+<?php $this->headStyle()->captureEnd() ?>
+
+<div class="acc_inbox" id="container">
+    <a href="<?php echo $this->baseUrl('account/outbox')?>" class="back_to left"> 
+        &laquo; Back to Outbox
+    </a>
+         
+    <div class="right">
+        <div class="darkgreen_button left">
+            <a href="<?php echo $this->baseUrl('account/edit-profile')?>">
+                EDIT PROFILE<span>Edit your profile</span>
+            </a>
+        </div><!-- END purple_button   -->
+        <div class="orange_button left">
+            <a href="<?php echo $this->baseUrl('account/outbox')?>">
+                OUTBOX<span>View sent messages</span>
+            </a>
+        </div><!-- END blue_button   -->
+        <div class="purple_button left">
+            <a href="<?php echo $this->baseUrl('account/outbox')?>">
+                INBOX<span>Check incoming messages</span>
+            </a>
+        </div><!-- END gray_button   -->
+        <div class="clear"></div>    
+    </div>
+    <div class="clear"></div>
+    
+    <div class="main_box inbox_mail">
+        <h3 class="left"><?php echo $this->projectInfo->getProjectTitle()?> 
+            <a href="#">BY <?php echo $this->projectInfo->getProjectOwner()->getUsername()?></a>
+        </h3>
+        <br/>
+        <div class="clear"></div>
+        
+        <?php
+        foreach ($this->projectMessagesByReceiver as $message) {
+        ?>
+
+        <div style="width:100%" class="color">  
+            <div style="float:left;width:10%;">
+                <div style="height:2px;"></div>
+                <div class="foto_box left" style="height:58px;width:58px;">
+                    <a href="<?php echo $this->baseUrl('account/profile') 
+                                        . '/' . $message->getSenderUser()->getUsername()?>"> 
+                        <img style="height:58px;width:58px;" 
+                             src="<?php echo $this->baseUrl('images/profile_image/thumb') 
+                                             . '/' . $message->getSenderUser()->getProfileImage()?>"/>
+                    </a>
+                </div>
+             </div>	
+             <div style="float:left;width:85%;text-align:justify;padding: 10px" class="color">		 
+                <a href="<?php echo $this->baseUrl('account/profile') . '/' . $message->getSenderUser()->getUsername()?>" 
+                   style="color:black;font-size:12px;" > 
+                    <b><?php echo $message->getSenderUser()->getUsername()?></b>
+                    <div class="clear"></div>
+                </a>
+                <div style="font-size:12px;">
+                    <?php echo $message->getMessage()?>
+                </div>
+                <div class="clear"></div>
+                <div class="date">
+                    <?php echo date('d M Y H:i:s', strtotime($message->getCreatedOn()))?>
+                </div> 
+            </div>  
+        </div>
+        <div class="clear"></div>
+        <br/><br/>
+
+        <?php
+        }
+        ?> 
+
+    </div><!-- END main_box   -->
+</div>

@@ -1,0 +1,132 @@
+<div id="container" class="projects">
+    <div class="main_box left members_list project_list" style="width:920px;">
+        <!--h3 class="left">FEEDBACK PROJECT LIST</h3-->
+        <div class="clear"></div> 
+        <div style="height:15px;"></div>
+        <a class="round_gray_button" href="<?php echo $this->baseUrl('project/feedbacks-by-me'); ?>" 
+           style="width:128px;float:left">
+            Sent feedback
+        </a>
+        <a class="round_gray_button" href="<?php echo $this->baseUrl('project/feedbacks-for-me'); ?>" 
+           style="width:165px;float:left;margin-left:5px;">
+            Feedbacks For Me
+        </a>
+        <br/><br/><br/>
+
+        <div class="clear"></div>
+        <div class="pagination left">
+          <?php echo $this->pagination?>
+        </div><!-- END pagination   -->
+
+        <?php echo $this->partial('project/_sorting-links-feedback.phtml', 
+                                  array('action' => 'feedbacks-by-me', 'searchType' => $this->searchType));?>      
+
+        <? 
+        if(!empty($this->givenFeedbacks)) {
+        ?>
+        
+        <table width="100%" cellspacing="0" cellpadding="0" class="member_feedback">
+            <tbody>
+            <tr class="header_row">
+                <th class="large_cell first_cell"><span>Project Name</span></th>
+                <th class="small_cell"><span>Username</span></th>
+                <th class="long_cell"><span>Comment</span></th>
+                <th class="small_cell"><span>Date</span></th>
+                <th class="large_cell"><span>Rating</span></th>
+                <!--th class="small_cell"><span>Action</span></th-->
+            </tr>
+
+            <?
+            foreach ($this->givenFeedbacks as $feedback) {
+            ?>
+
+            <tr class="first_row">
+                <td class="first_cell">
+                    <a href="<?php echo $this->baseUrl('project/project-details') . '/' . $feedback->getProjectId()?>" 
+                       class="blue_title"> 
+
+                    <?php
+                    if(strlen($feedback->getProject()->getProjectTitle()) < 18) {
+                        echo $feedback->getProject()->getProjectTitle();
+                    } else {
+                        echo substr($feedback->getProject()->getProjectTitle(),0,18)."...";
+                    }
+                    ?>
+
+                    </a>
+                </td>
+
+                <?php
+                if($feedback->getOwnerUserId() == $this->sessionUserId) {
+                    $user_id = $feedback->getBidderUserId();
+                    $feedback_rate = $feedback->getOwnerFeedbackRate();
+                    $comment = $feedback->getOwnerComment(); 
+                    $date = date('d M Y',strtotime($feedback->getOwnerPostDate()));
+                } else if($feedback->getBidderUserId() == $this->sessionUserId) {
+                    $user_id = $feedback->getOwnerUserId();
+                    $feedback_rate = $feedback->getBidderFeedbackRate(); 
+                    $comment = $feedback->getBidderComment();
+                    $date = date('d M Y',strtotime($feedback->getBidderPostDate())); 
+                }
+                ?>
+
+                <td>
+                    <a class="blue_title" href="<?php echo $this->baseUrl('account/profile') . '/' //. echo $result['username']?>" target="_blank">
+                        <?php echo $this->userFeedbacks[$user_id]; ?>
+                    </a>
+                </td>
+                <td class="firstcomment">
+                    <?php echo $comment?>
+                </td>
+                <td>
+                    <?php echo $date?> 
+                </td>
+                <td>
+
+                    <?php 
+                    for($i = 1; $i<=$feedback_rate; $i++) {
+                    ?>
+
+                    <img src="<?php echo $this->baseUrl('images/featur_star.png'); ?>"> 
+
+                    <?php
+                    } 
+                    
+                    for($i = $feedback_rate+1; $i<=5; $i++) {
+                    ?>
+
+                    <img src="<?php echo $this->baseUrl('images/featur_star_divisible.png'); ?>"> 
+
+                    <?php
+                    }  
+                    ?> 
+
+                </td>
+                <!--td>Click Here</td-->
+            </tr>
+
+            <?php
+            }
+            ?>
+
+            </tbody>
+        </table>
+
+        <?
+        }  
+        ?>    
+
+        <div class="clear"></div>
+
+        <div class="pagination">
+            <?php echo $this->pagination?>   
+        </div><!-- END mail_pagination   -->
+    <!-- END project_list   -->   
+    </div><!-- END new_in_cat   -->
+
+    <?php echo $this->render('bottom-three-btn.phtml');?>
+
+    <div class="clear"></div>
+</div><!-- END container   -->
+    
+  

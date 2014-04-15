@@ -1,0 +1,350 @@
+<div class="projects" id="container">
+    <a href="<?php echo $this->baseUrl('project'); ?>" class="back_to left"> 
+        &laquo; Back to Project Listings
+    </a>
+    <div class="right">
+
+        <?php
+        if (!$this->isProjectOwner) {
+        ?>
+        
+        <div id="orange_button" class="orange_button left">
+            
+            <?php
+            if(!empty($this->isProjectAssigned)) {
+            ?>
+            
+            <a href="javascript:void(0);" onclick="frozen_project_func()">
+            
+            <?php
+            } else if(empty($this->sessionUserId)) {  
+            ?> 
+                
+            <a href="<?php echo $this->baseUrl('project/project-bid'); ?>/<?php echo $this->projectDetails->getProjectId()?>">    
+                
+            <?php
+            } else if($this->isCurrentUserBidder == 1) {
+            ?> 
+                
+            <a href="javascript:void(0);" onclick="check_bid_user_func()"> 
+                
+            <?php
+            } else if (!empty($this->sessionUserId) && $this->bidNumberCount == 1) {
+                
+                if($this->paymentCheck != 0) {
+                ?>   
+
+                <a href="javascript:void(0);" onclick="payment_check_func('<?php echo $this->projectDetails->getProjectId()?>')"> 
+
+                <?php 
+                } else {
+                ?>   
+
+                <a href="javascript:void(0);" onclick="bid_number_count_func('<?php echo $this->projectDetails->getProjectId()?>')"> 
+
+                <?php
+                    }
+            } else if ($this->isCurrentUserBidder == 0) {
+                $_SESSION['project_id_bid'] = $this->projectDetails->getProjectId(); 
+            ?>
+                    
+            <a href="<?php echo $this->baseUrl('project/project-bid'); ?>">
+                
+            <?php
+            }
+
+            if(!empty($this->isProjectAssigned)){
+                echo 'PROJECT FROZEN<span>You could not bid for this project</span>';
+            } else {
+                echo 'BID FOR PROJECT<span>Submit a bid for this project</span>';
+            }  
+            ?> 
+
+            </a>
+        </div><!-- END blue_button   -->
+        
+        <?php
+        }
+        ?>
+        
+        <div class="clear"></div>    
+    </div>
+    <div class="clear"></div>
+    <div class="main_box project_bidders">
+        <p><center style="color:blue;"><?php echo $this->message;?></center></p>
+        <h3 class="left"><?php echo $this->projectDetails->getProjectTitle()?></h3>
+        <h2 class="right purple_titel">Category: <?php echo $this->projectDetails->getPrimaryCategory()->getCategoryTitle()?></h2>
+        <div class="clear"></div>
+        <p>
+            <?php echo $this->projectDetails->getProjectDescription()?> 
+        </p>
+        <div class="project-details">
+            <h3>DETAILS OF PROJECT</h3>
+            <span class="gray_text">Budget : $<?php echo round($this->projectDetails->getCost())?></span>
+            <span class="gray_text">Additional requirements : <?php echo $this->projectDetails->getAdditionalRemarks()?></span>
+            
+            <?php
+            if($this->projectDetails->getMeetUpRequired() == '1') {
+            ?>
+            
+            <span class="gray_text true_feat left">Meetup required</span>
+            
+            <?php
+            } else {
+            ?>
+            
+            <span class="gray_text false_feat left">Meetup required</span>   
+            
+            <?php
+            }
+            
+            if($this->projectDetails->getMilestonePayments() == '1') {
+            ?>   
+            
+            <span class="gray_text true_feat left">Milestone payments</span>
+            
+            <?php
+            } else {
+            ?>
+            
+            <span class="gray_text false_feat left">Milestone payments</span>
+            
+            <?php
+            }
+            
+            if($this->projectDetails->getRequirePortfolio() == '1') {
+            ?> 
+            
+            <span class="gray_text true_feat left">Portfolio required</span>
+            
+            <?php
+            } else {
+            ?>
+            
+            <span class="gray_text false_feat left">Portfolio required</span>  
+            
+            <?php
+            }
+            ?>
+            
+            <div class="clear"></div>
+            <span class="gray_text">Files attached :
+                
+            <?php
+            if(!empty($this->projectAttachments)) {
+                $i = 0;
+                $file = '';
+                foreach($this->projectAttachments as $row_attachment) { 
+                    if($i != 0) {
+                        $file .=", ";
+                    }  
+                    $file .= '<a style="color:blue;" href="'. $this->baseUrl('attachment_file') 
+                           . '/' . $row_attachment->getAttachment() 
+                           . '" target="_blank">' 
+                           . $row_attachment->getAttachment() . '</a>';
+                    $i++; 
+                }
+                echo $file;
+            } else echo "N.A.";  
+            ?>
+                
+            </span>
+        </div><!-- END latest_project   -->
+        
+        <?php
+        if ( $this->isProjectOwner && !$this->afterProjectAccept ) {
+        ?>
+        
+        <div id="project_cancel" style="text-align:center;display:none;">
+            <h3 class="left sec">BIDDERS</h3>
+            <span class="right bidders_option">To cancel your project, click 
+            <a href="javascript:void(0);" 
+               onclick="project_cancel_func('<?php echo $this->projectDetails->getProjectId()?>')">
+                here
+            </a>
+            </span>
+        </div> 
+        
+        <?php
+        }
+        ?>
+
+        <?php  
+        if($this->assignedBid->getBidderUserId()) {
+        ?>   
+        
+        <div id="is_project_assign" style="text-align:center;color:green;">
+            <span class="right bidders_option">	
+                
+            <?php
+            if(!empty($this->sessionUserId) && $this->sessionUserId == $this->assignedBid->getBidderUserId()) {  
+                $sessionUserProjectBid = $this->assignedBid;
+                $acceptDecline = $sessionUserProjectBid->getAcceptDecline();
+                if(empty($acceptDecline)) {
+            ?>
+                
+            <div id="accept_decline_div">
+                You have been assigned this project, please choose to
+                <a class="accept"  href="javascript:void(0);" 
+                   onclick="accept_func('<?php echo $this->url(array('projectId' => $sessionUserProjectBid->getProjectId(), 
+                                                                     'bidderUserId' => $sessionUserProjectBid->getBidderUserId()), 
+                                                               'acceptProject') ?>')">
+                    accept
+                </a> 
+                or 
+                <a class="decline" href="javascript:void(0);" 
+                   onclick="decline_func('<?php echo $this->url(array('projectId' => $sessionUserProjectBid->getProjectId(), 
+                                                                     'bidderUserId' => $sessionUserProjectBid->getBidderUserId()), 
+                                                               'declineProject') ?>')">
+                    decline
+                </a>
+            </div>  
+                
+            <?php
+                } else {
+                    echo "This project is assigned to you.";
+                }
+            } else {
+                echo "This project is assigned to " . 
+                        $this->assignedBid->getBidderUser()->getUsername() . ' ';
+            }
+            ?>    
+                
+            </span>
+        </div>
+        
+        <?php    
+        }
+        ?>				 
+        
+        <div class="clear"></div>
+        <div style="height:20px;"></div>
+        
+        <?php
+        if(!empty($this->projectBids)) { 
+        ?> 
+        
+        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="acc_mail project_bids">
+        <tbody>
+            <tr class="header_row">
+                <th class="first_cell">Username</th>
+                <th class="">Bidding Price</th>
+                <th class="">Delivery Timeline</th>
+                <th class="">Bidding Date</th>
+                
+            <?php
+            if(isset($this->isProjectOwner)) {
+                if($this->isProjectOwner == 1 || $this->isCurrentUserBidder == 1) {/*or  empty($this->isProjectAssigned*/
+            ?> 
+                
+                <th id="Remarks" class="last_cell">Remarks</th>
+                
+            <?php   
+                }
+            }
+            ?>
+                
+            </tr>
+            
+            <?php 
+            foreach($this->projectBids as $bid) {
+            ?>
+            
+            <tr>
+                <td>
+                    <a class="" style="color:blue;" 
+                       href="<?php echo $this->baseUrl('account/profile'); ?>/<?php echo $bid->getBidderUser()->getUsername()?>">
+                        <?php echo $bid->getBidderUser()->getUsername()?>  
+                    </a>
+                </td>
+                <td><?php //echo getCurrencyCode($bid->getCurrencyCode()).$bid->getBidAmount()?></td>
+                <td><?php echo $bid->getTimePeriod()?> Days </td>
+                <td><?php echo date('d M Y',strtotime($bid->getCreatedOn()))?>  </td>
+                <td>
+                    
+                <?php 
+                if($this->isProjectOwner == 1) { 
+                    if(!empty($this->isProjectAssigned)) {
+                        if($this->assignedBid->getBidderUserId() == $bid->getBidderUserId()) { //***   
+                ?>
+                    
+                    <a style="color:red;" href="javascript:void(0);" onclick="after_assign_func()">
+                        Assigned 
+                    </a>
+                    
+                    <?php
+                        }
+                    } else {  
+                    ?> 
+                    
+                    <a style="color:blue;" href="javascript:void(0);" 
+                       onclick="project_assign_func('<?php echo $this->url(array('projectId' => $bid->getProjectId(), 
+                                                                                 'bidderUserId' => $bid->getBidderUserId()), 
+                                                                           'assignProject') ?>')">
+                        Assign
+                    </a>
+                    
+                <?php  
+                    }
+                } else {    
+                    if($this->sessionUserId == $bid->getBidderUserId() && empty($this->isProjectAssigned)) { 
+                        $_SESSION['session_project_id'] = $bid->getProjectId();
+                ?> 
+                    
+                    <a title="edit this bid" style="color:blue;" href="<?php echo $this->baseUrl('project/edit_bid'); ?>" >
+                        <img src="<?php echo $this->baseUrl('images/edit_icon.jpg'); ?>" style="width:50px;height:22px;">   
+                    </a>                             
+                    <a title="delete this bid" href="javascript:void(0);" 
+                       onclick="delete_bid_func('<?php echo $bid->getProjectId()?>')">
+                        <img src="<?php echo $this->baseUrl('images/delete_icon.png'); ?>" style="width:50px;height:22px;">
+                    </a>
+                    <a title="send a message" 
+                       href="<?php echo $this->baseUrl('account/inbox_single_project'); ?>/<?php echo $bid->getProjectId()?>/<?php echo $bid->getProject()->getUserId()?>/">
+                        <img src="<?php echo $this->baseUrl('images/message_icon.jpg'); ?>" style="width:50px;height:22px;">
+                    </a>
+                    
+                    <?php  
+                    }
+                    ?>
+                    
+                </td>
+                
+                <?php
+                }
+                ?>
+                
+            </tr>
+            
+        <?php
+            }
+        }  
+        ?>
+            
+        </tbody></table><!-- END project_bids   -->
+    </div><!-- END main_box   -->
+</div>
+
+<?php $this->headScript()->captureStart() ?>
+
+var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+var bid_number_per_month = '<?php echo $this->bidNumberPerMonth?>';
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?php
+if(isset($this->sessionUserId)) {
+    if(!$this->isProjectOwner == 1 && !empty($this->isProjectAssigned)) {
+?>
+
+<?php $this->headScript()->captureStart() ?>
+
+$('#Remarks').hide(); 
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?php
+    }
+}
+?>		
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/project-details.js')) ?>

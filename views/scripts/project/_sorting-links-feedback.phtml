@@ -1,0 +1,12 @@
+<div class="pagination right">
+    <span><b>Sort : </b></span>
+    <a <?php if($this->searchType == 'latest' || $this->searchType == 'latest'){ ?> class="current_page"<? }?> 
+       href="<?php echo $this->baseUrl('project/' . $this->action . '/latest'); ?>">
+        Latest
+    </a><span> / </span>
+    <a <?php if($this->searchType == 'alphabetical'){ ?> class="current_page"<? }?> 
+       href="<?php echo $this->baseUrl('project/' . $this->action . '/alphabetical'); ?>"> 
+        Alphabetical 
+    </a>
+</div><!-- END pagination   -->
+<div class="clear"></div> 

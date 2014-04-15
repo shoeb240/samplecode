@@ -1,0 +1,65 @@
+<?php
+$authIdentity = false;
+$auth = Zend_Auth::getInstance();
+if ($auth->hasIdentity()) {
+    $authIdentity = $auth->getIdentity();
+}
+?>
+
+<header>
+    <a href="<?php echo $this->baseUrl('/'); ?>" id="site_logo" class="left">
+        <img src="<?php echo $this->baseUrl('images/site_logo.png'); ?>" alt="" />
+    </a>
+    <div class="left header_leftsection">
+        <div class="right login_area">
+            <a class="twitter" href="https://twitter.com/#!/abc" target="_blank"></a>
+            <a class="facebook" href="http://www.facebook.com/abc" target="_blank"></a>
+            
+            <?php 
+            if($authIdentity) {   
+            ?>
+            
+            <a class="login" href="<?php echo $this->baseUrl('index/logout'); ?>">logout</a>
+            <span>|</span> 
+            <?php echo $this->placeholder('inbox');?>
+                
+            <?php 
+            } else { 
+            ?>
+            
+            <a class="login" href="<?php echo $this->baseUrl('index/login'); ?>">login</a>
+            <span>|</span>
+            <a class="signup" href="<?php echo $this->baseUrl('index/signup'); ?>">REGISTER NOW</a>
+            
+            <?php 
+            } 
+            ?>
+            
+            <div class="clear"></div>
+        </div><!-- END login_area   -->
+        <div class="clear"></div>
+        
+        
+        <div id="menu_tap">
+            <div class="left_bg"></div>
+            <div class="bottom_bg"></div>
+            
+            <nav class="left main_menu">
+                <?php echo $this->placeholder('navigation');?>
+            </nav>    <!-- END main_menu   -->
+            
+            <div class="search_area left">
+                <form name="creative_search_Frm" method="post" 
+                      action="<?php echo $this->baseUrl('member/creative-search'); ?>">
+                    <input type="text" name="creative_search" id="creative_search" 
+                           placeholder="SEARCH CREATIVES" />
+                    <a class="search_button" href="javascript:void(0);" 
+                       onclick="creative_search_func()"></a>
+                </form>
+            </div><!-- END search_area   -->
+            
+        </div><!-- END menu_tap   -->
+        
+    </div><!-- END header_left-section   -->
+    <div class="clear"></div>
+</header><!-- END header   -->

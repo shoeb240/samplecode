@@ -1,0 +1,42 @@
+<div class="left">
+
+    <?php
+    if ($this->profileImage == '') { 
+    ?>
+
+    <div class="<?php echo $this->class;?>" id="image">NO PHOTO</div>
+
+    <?php
+    } else { 
+    ?>
+
+    <div class="<?php echo $this->class;?>" id="image">
+        <img src="<?php echo $this->imagePath;?>/profile_image/thumb/<?php echo $this->profileImage;?>" 
+             width="160" height="160" alt="profile_image"/>
+    </div>
+
+    <?php 
+    } 
+    ?>
+
+    <input type="hidden" name="previousImage" value="<?php echo $this->profileImage;?>"/>
+    <div class="clear"></div>
+
+    <center>
+        <img id="loading" src="<?php echo $this->imagePath;?>/loading.gif" style="display:none;">
+    </center>
+
+    <div id="file-uploader-demo1"></div>   
+
+    <div class="clear"></div>
+
+    <div id="upload">
+        <?php 
+        echo $this->{$this->element->helper}(
+                 $this->element->getName(),
+                 $this->element->getValue(),
+                 $this->element->getAttribs()
+             ) 
+        ?>
+    </div>
+</div>

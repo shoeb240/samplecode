@@ -1,0 +1,74 @@
+<div id="container" class="projects">
+    <div class="main_box left members_list project_list member_project" style="width:920px;">
+        <?php echo $this->partial('project/_archive-projects-tab.phtml', 
+                                  array('tabActive1' => 'active', 'tabActive2' => ''));?>
+        
+        <div class="clear"></div>
+        <div class="pagination left" style="margin-top:20px;">
+         <?php echo $this->pagination?>
+        </div><!-- END pagination   -->
+        
+        <?php echo $this->partial('project/_sorting-links.phtml', 
+                                  array('action' => 'archive-projects', 'searchType' => $this->searchType));?>
+        
+        <div class="clear"></div> 
+            
+        <?php
+        if(!empty($this->archiveProjects)) {
+            foreach ($this->archiveProjects as $archiveProject) {
+        ?>
+        
+        <div class="project_box left">
+            <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $archiveProject->getProjectId()?>" 
+               class="blue_title">
+
+            <?php
+            if(strlen($archiveProject->getProjectTitle()) < 18) {
+                echo $archiveProject->getProjectTitle();
+            } else {
+                echo substr($archiveProject->getproject_title(),0,18)."...";
+            }
+            ?>
+
+            </a>
+            <span class="gray_text">Status : Bid (<?php echo $archiveProject->getTotalBid()?> bids)</span>
+            <span class="gray_text">Assigned to : 
+
+            <? 
+            if(!empty($this->assignedProjectsUsers[$archiveProject->getProjectId()])) {
+                echo  $this->assignedProjectsUsers[$archiveProject->getProjectId()]['username'] . ' ';
+            } else {
+                echo "N.A";
+            }
+            ?>  
+
+            </span>
+            <span class="gray_text">Bid ending : 
+                <?php echo date('d M Y',strtotime($archiveProject->getBidEndingDate())); ?>
+            </span>
+            <div class="blue_button">
+                <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $archiveProject->getProjectId()?>">
+                        BUDGET : &lt; $<?php echo round($archiveProject->getCost());?>
+                </a>
+            </div><!-- END blue_button   -->
+        </div><!-- END project_box (1)   -->
+        
+        <?
+            }
+        } else {
+           echo "<center><h3>NO PROJECT FOUND IN THIS LIST!</h3></center>";
+        }  
+        ?>
+
+        <div class="clear"></div>
+
+        <div class="pagination">
+            <?php echo $this->pagination;?> 
+        </div><!-- END mail_pagination   -->
+    <!-- END project_list   -->   
+    </div><!-- END new_in_cat   -->
+
+    <?php echo $this->render('bottom-three-btn.phtml');?>
+
+    <div class="clear"></div>
+</div><!-- END container   -->

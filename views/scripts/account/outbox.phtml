@@ -1,0 +1,89 @@
+<div id="container" class="acc_inbox">
+    
+    <?php echo $this->render('account/my-common.phtml');?>
+    
+    <div class="clear"></div>
+    
+    <?php
+    if(!empty($this->outboxList)) {
+    ?>
+    
+    <div class="main_box">
+        <h3 class="left"><?php echo strtoupper($this->sessionUsername)?>'S OUTBOX</h3>
+        <div class="search_area right">
+            <input type="text" name="message_search" id="message_search" 
+                   value="<?php echo $this->messageSearchUser;?>" placeholder="SEARCH EMAIL" />
+            <a class="search_button" href="javascript:void(0);" onclick="search_func();"></a>
+        </div><!-- END search_area   -->
+        <div class="clear"></div>
+        <div class="pagination">
+           <?php echo $this->pagination?>
+        </div><!-- END mail_pagination   -->
+        <table class="acc_mail" width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr class="header_row">
+                <th class="large_cell first_cell" style="width:140px;"><span>MEMBER NAME</span></th>
+                <th class="large_cell" style="width: 300px;"><span>PROJECT NAME</span></th>
+                <th class="small_cell" style="width:100px;"><span>SENT DATE</span></th>
+                <th class="last_cell" style="width:170px;"></th>
+            </tr>
+            
+            <?
+            foreach($this->outboxList as $msg){
+            ?>
+            
+            <tr class="" onclick="return false;">
+                <td class="first_cell"><?php echo $msg->getReceiverUser()->getUsername();?></td>
+                <td><?php echo $msg->getSubject()?> (<?php echo $msg->getTotalMessage()?>)</td>
+                <td><?php echo date('d M Y', strtotime($msg->getCreatedOn()));?></td>
+                <td class="actions">
+                    <a title="click to view" 
+                       href="<?php echo $this->baseUrl('account/project-outbox') 
+                                        . '/' . $msg->getProjectId()?>/<?php echo $msg->getReceiverUserId()?>/" 
+                       class="action_1">
+                    </a>
+                    <a href="javascript:void(0);" 
+                       onclick="outbox_message_delete_func('<?php echo $msg->getProjectId()?>','<?php echo $msg->getReceiverUserId()?>')" 
+                       class="delete">
+                    </a>
+                    <a title="click to view profile" 
+                       href="<?php echo $this->baseUrl('account/profile') 
+                                        . '/' . $msg->getReceiverUser()->getUsername();?>" 
+                       class="action_2">
+                    </a>
+                </td>
+            </tr>
+            
+            <?
+            }
+            ?>
+            
+        </table>
+        <div class="pagination">
+           <?php echo $this->pagination?>
+        </div><!-- END mail_pagination   -->
+    </div><!-- END main_box   -->
+    
+    <?
+    } else {
+    ?>
+    
+    <center>
+        <div style="height: 300px; color: #2b66c9;">
+            No data found!
+        </div>
+    </center>
+    
+    <?
+    }
+    ?>
+    
+</div><!-- END container   -->
+
+<?php $this->headScript()->captureStart() ?>
+
+var url = '<?php echo $this->baseUrl('account/outbox');?>';
+var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/inbox.js')) ?>        

@@ -1,0 +1,96 @@
+<div id="container" class="my_account">
+    
+    <?php echo $this->render('account/my-common.phtml');?> 
+    
+    <div class="clear"></div>
+    <div class="main_box">
+        <h3>
+            <?php echo strtoupper($this->userInfo->getUsername());?>'S PROFILE 
+            
+            <?php 
+            if($this->userInfo->getIsPremium()) {
+            ?> 
+            
+            <img src="<?php echo $this->baseUrl('images/featur_star_large.png'); ?>"/>
+            
+            <?php
+            }
+            ?>
+            
+        </h3>
+        <div class="clear"></div>
+        
+        <?php echo $this->form;?>
+        
+        <div class="left myaccount_info">
+            <h2>PRIMARY CATEGORY: (<?php echo $this->userInfo->getPrimaryCategory()->getCategoryTitle(); ?>)</h2>
+            
+            <label class="field_title">Last Login :</label>
+            <span><? echo @date('d M Y', strtotime($this->userInfo->getLastLogin()));?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Rating :</label>
+            <span><? echo 'Level ' . $this->userInfo->getRating();?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Member Since :</label>
+            <span><?php echo date('d M Y', strtotime($this->userInfo->getCreatedOn()));?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Hired :</label>
+            <span>
+                <?php if($this->userInfo->getUserHired() != null) { echo $this->userInfo->getUserHired();} else { echo '0';}?> Member
+                <?php if($this->userInfo->getUserHired() > 0) echo 's'?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Worked on :</label>
+            <span>
+                <?php if($this->userInfo->getUserWorked() != null) { echo $this->userInfo->getUserWorked();} else { echo '0';}?> Project
+                <?php if($this->userInfo->getUserWorked() > 0) echo 's'?></span>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        
+        <label class="field_title left upgrade_memb">Premium Membership : </label>
+        
+        <?php
+        if($this->userInfo->getIsPremium() == 0) {
+        ?>
+        
+        <a  href="<?php echo $this->baseUrl('index/upgrade_membership'); ?>" 
+            class="round_gray_button upgrade_button left">UPGRADE MEMBERSHIP (1 YEAR)
+        </a>
+            
+        <?php
+        } else {
+        ?>
+            
+        <a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=<?php echo urlencode("'".Zend_Registry::get('BUSINESS_EMAIL')."'")?>" _fcksavedurl="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=<?php echo urlencode("'".Zend_Registry::get('BUSINESS_EMAIL')."'")?>" 
+           class="round_gray_button upgrade_button left">CANCEL SUBSCRIPTION</a>   
+        
+        <?php
+        }
+        ?>
+        
+        <div class="clear"></div>
+        <span class="note">
+            (Premium membership allows
+            unlimited bids any time of the
+            year, And are featured to
+            potential clients)
+        </span>
+    </div><!-- END home_banner   -->
+</div><!-- END container   -->
+
+
+<?php $this->headScript()->captureStart() ?>
+
+var upload_button_name  = 'Select Photo';
+var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?php $this->headLink()->appendStylesheet($this->baseUrl('scripts/without-flash-uploader/fileuploader.css')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/without-flash-uploader/fileuploader.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/edit-profile.js')) ?>        
+

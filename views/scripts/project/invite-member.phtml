@@ -1,0 +1,122 @@
+<div class="submit_project" id="container">
+    <div class="purple_button">
+        <a href="#">SUBMIT PROJECT<span>Tell us about your project</span></a>
+    </div><!-- END purple_button   -->
+    <div class="clear"></div>
+    
+    <div class="main_box">
+        <div class="left">
+            <h3>PROJECT DETAILS</h3>
+            <p style="color:red;"><?php echo $this->message;?></p>
+            <p class="thanks_text">  
+                Click <a href="<?php echo $this->baseUrl('project/project-details') . '/' . $this->projectId?>/">here</a> 
+                to view your project, or invite users to bid below.
+            </p>
+        </div>
+        <div class="big_green_button right">
+            <a href="#">INVITE MEMBERS TO BID FOR YOUR PROJECT<span>Invite members to bid for your project now.</span></a>
+        </div><!-- END big_green_button   -->
+        <div class="clear"></div>
+        
+            <?
+            if(!empty($this->suggestedInviteMembers)) {
+                 foreach($this->suggestedInviteMembers as $suggestedMember) {
+            ?>
+        
+            <div class="rec_memb_box left">
+                <div class="foto_box left">
+                    <a href="<?php echo $this->baseUrl('account/profile') . '/' . $suggestedMember->getUsername()?>"> 
+                        
+                        <?
+                        if($suggestedMember->getProfileImage() == '') {    
+                        ?>
+                        
+                        <img src="<?php echo $this->baseUrl('images/no_image.png'); ?>" style="height:88px;width:88px;">  
+                        
+                        <?
+                        } else {
+                        ?>
+                        
+                        <img src="<?php echo $this->baseUrl('images/profile_image/thumb') . '/' . $suggestedMember->getProfileImage()?>" 
+                             style="height:88px;width:88px;">
+                        
+                        <?
+                        }
+                        ?>
+                        
+                    </a>     
+                </div>
+                <div class="memb_info left">
+                    <a href="<?php echo $this->baseUrl('account/profile') . '/' . $suggestedMember->getUsername()?>"> 
+                        <span class="<?if($suggestedMember->getIsPremium()==1){?>username<? }else {?>username_not_premium<?}?>">
+                            <? echo $suggestedMember->getUsername(); ?>
+                        </span>
+                    </a>  
+                    <div class="clear"></div>
+                    <span>Member since : <? echo date('d M Y', strtotime($suggestedMember->getCreatedOn()))?></span>
+                    <span>Rating : <?php echo $suggestedMember->getRating()?></span>
+                    <span>Projects Complete : <?php echo $suggestedMember->getUserWorked()?></span>
+                    
+                        <?php
+                        if(!$suggestedMember->getCustom()) {   
+                            if($this->invitedMemberCount < Zend_Registry::get('invitedMemberLimit')) {
+                        ?>
+                    
+                        <a class="invite_button" href="<?php echo $this->baseUrl('project/invite-member') 
+                                                                . '/' . $this->projectId . '/' . $suggestedMember->getUserId()?>">
+                            Invite Member
+                        </a>
+                        
+                            <? 
+                            } else {
+                            ?>
+                        
+                        <a class="invite_button" onclick="invite_member_count_func()">Invite Member</a>    
+                        
+                        <?
+                            }
+                        } else {
+                        ?>
+                        
+                        <a class="invite_button invited" href="javascript:void(0);" 
+                           onclick="already_invited_func()">
+                            Invited
+                        </a>
+                        
+                        <?
+                        }
+                        ?>
+                        
+                </div>
+                <div class="clear"></div>
+            </div><!-- END rec_memb_box  (1) -->
+            
+            <?
+                }
+            }   
+            ?>
+
+        <div class="clear"></div>
+        <a class="light_green_button left" href="<?php echo $this->baseUrl('project/invite-member') . '/' . $this->projectId; ?>" >
+            SHUFFLE! &amp; see more members
+        </a>
+        <span class="right invited_numb"><?php echo $this->invitedMemberCount;?> out of 20 members invited.</span>
+        <div class="clear"></div>
+    </div><!-- END main_box   -->
+</div>
+        
+<?php $this->headScript()->captureStart() ?>
+
+var number = <?php echo Zend_Registry::get('invitedMemberLimit')?>;  
+function invite_member_count_func()
+{
+    alert('You are already invited '+ number + ' members!');
+}
+
+function already_invited_func()
+{
+    alert('You are already invited this person for this project!');
+    return false;
+}
+
+<?php $this->headScript()->captureEnd() ?>

@@ -1,0 +1,9 @@
+<label class="field_title"><?php echo $this->element->getLabel();?><span style="color: red;">*</span> :</label>
+    <select class="<?php echo $this->class;?>" id="<?php echo $this->element->getName()?>" 
+            name="<?php echo $this->element->getName()?>">
+        <option value="">Select Country</option>
+        <script>
+            printCountryOptions();
+        </script>
+    </select>
+<div class="clear"></div>

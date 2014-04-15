@@ -1,0 +1,25 @@
+ 
+<div id="container" class="submit_project">
+    <div class="purple_button left">
+        <a href="javascript:void(0);" onclick="submit_project_func()">
+            SUBMIT PROJECT<span>Tell us about your project</span></a>
+    </div><!-- END purple_button   -->
+    <div class="brown_button right">
+        <a href="#">3 REASONS TO USE OUR SITE<span>Find out more about the perks of using our website</span></a>
+    </div><!-- END green_button   -->
+    <div class="clear"></div>
+
+
+    <div class="main_box"> 
+
+        <h3>PROJECT DETAILS</h3>
+        <p style="color:red"><?php echo $this->errors;?></p>
+        
+        <?php echo $this->form;?>
+        
+        <div class="clear"></div>
+
+    </div><!-- END main_box   -->
+</div><!-- END container   -->
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/project-submit.js')) ?>

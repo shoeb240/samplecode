@@ -1,0 +1,83 @@
+<div id="container" class="my_account">
+    <a class="back_to left" href="<?php echo $this->baseUrl('account/portfolio') . '/' . $this->sessionUsername;?>"> 
+        &laquo; Back to your portfolio page
+    </a>
+    <div class="right">
+        <div class="purple_button left">
+            <a href="<?php echo $this->baseUrl('account/portfolio') . '/' . $this->sessionUsername;?>">
+                MY PORTFOLIO<span>View my projects</span>
+            </a>
+        </div><!-- END gray_button   -->
+    </div>
+    <div class="clear"></div>
+    
+    <div class="main_box portfolio_add">
+        <h3>UPDATE PORTFOLIO ITEM</h3>
+        <div style="clear: both;"></div>
+
+        <?php echo $this->form;?>
+        
+        <div class="upload_preview left">
+            <h3>UPLOAD PREVIEW</h3>
+            <span id="image"> </span>
+            <div class="clear"></div>
+
+            <div class="contain_buttons">
+                <center>
+                    <img id="loading" src="<?php echo $this->baseUrl('images/loading.gif'); ?>" 
+                         style="display:none;">
+                </center>
+
+                <div id="file-uploader-demo1"></div>
+
+            </div>
+
+        </div>
+        <div class="clear"></div>
+    </div><!-- END main_box   -->
+</div><!-- END container   -->
+    
+<?php $this->headLink()->appendStylesheet($this->baseUrl('scripts/without-flash-uploader/fileuploader.css')) ?>
+
+<?php $this->headScript()->captureStart() ?>
+
+    var upload_button_name  = 'CHANGE IMAGE';
+    var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+    var portfolio_image = '<?php echo $this->portfolioImage;?>';
+    
+<?php $this->headScript()->captureEnd() ?>
+    
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/without-flash-uploader/fileuploader.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/edit-portfolio.js')) ?>
+
+<!--[if IE]>
+<?php $this->headStyle()->captureStart() ?>
+
+    .change_image{
+    display: none !important;
+    }
+
+<?php $this->headStyle()->captureEnd() ?>
+<![endif]-->
+
+<?php $this->headStyle()->captureStart() ?>
+
+.contain_buttons .qq-upload-button {
+    background: url("../../images/change_cover_button.png") no-repeat scroll 0 0 transparent;
+    color: #545454;
+    display: block;
+    font-family: Tahoma;
+    font-size: 17px;
+    font-weight: bold;
+    height: 38px;
+    line-height: 40px;
+    margin-left: 0px;
+    margin-top: -80px;
+    padding: 0;
+    position: absolute;
+    text-align: center;
+    text-shadow: 0 1px #FFFFFF;
+    width: 188px;
+}
+
+<?php $this->headStyle()->captureEnd() ?>

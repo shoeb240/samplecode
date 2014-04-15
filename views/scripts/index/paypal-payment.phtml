@@ -1,0 +1,9 @@
+<?php echo $this->headScript()->setFile("/scripts/jquery-1.7.1.min.js")?>
+
+<?php echo $this->form;?>
+
+<?php $this->inlineScript()->captureStart() ?>
+
+    $('#triggerBtn').click();
+    
+<?php $this->inlineScript()->captureEnd() ?>

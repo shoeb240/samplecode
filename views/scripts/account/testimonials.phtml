@@ -1,0 +1,73 @@
+<div id="container" class="member_profile">
+    
+    <?
+    if(!empty($this->testimonials)) {     
+    ?>
+    
+    <a class="back_to left" 
+       href="<?php echo $this->baseUrl('account/profile') . '/' . $this->username?>"> 
+        &laquo; Back to <?php echo $this->username?>'s profile
+    </a>
+    <div class="clear"></div>
+    <div class="pagination left" style="font-size: 14px;">
+        <?php //echo $this->pagination?>
+    </div> 
+    
+    <?   
+    if(!empty($this->view->sessionUserId) && $this->view->sessionUserId == $this->userId) {   
+        echo $this->render('account/my-common.phtml');
+    } else {
+        echo $this->render('account/common.phtml');    
+    } 
+    ?>
+    
+    <div class="clear"></div>
+    <div class="main_box">
+    <div class="latest_testimonials memb_testim">
+        <h3>TESTIMONIALS FOR (<?php echo $this->username?>)</h3>
+        
+        <?php
+        foreach($this->testimonials as $testimonial) {
+            if($testimonial->getOwnerUserId() == $this->userId) { 
+               $userIdTestimonial = $testimonial->getBidderUserId();
+               //$feedbackRate = $testimonial->getBidderFeedbackRate();
+               $comment = $testimonial->getBidderComment();
+               $date = date('d M Y H:i:s',strtotime($testimonial->getBidderPostDate())); 
+            } else if($testimonial->getBidderUserId() == $this->userId) {  
+               $userIdTestimonial = $testimonial->getOwnerUserId();
+               //$feedbackRate = $testimonial->getOwnerFeedbackRate();
+               $comment = $testimonial->getOwnerComment();
+               $date = date('d M Y H:i:s',strtotime($testimonial->getOwnerPostDate()));   
+            }
+        ?>
+        
+        <p>
+            <?php echo $comment?>
+            <a class="blue_title" 
+               href="<?php echo $this->baseUrl('account/profile') . '/' . $this->userTestimonials[$userIdTestimonial];?>">
+                <?php echo '- ' . $this->userTestimonials[$userIdTestimonial] . ', ' . $date;?>
+            </a>
+        </p>
+        
+        <?
+        }
+        ?>
+
+    <div class="clear"></div>
+    </div><!-- END latest_testimonials   -->
+    </div><!-- END main_box   -->
+    
+    <?
+    } else {
+    ?>
+    
+    <div class="clear"></div>
+    <div class="main_box">
+        <span class="gray_text">No testimonials found.</span>
+    </div>
+    
+    <?    
+    }
+    ?>
+    
+</div><!-- END container   -->

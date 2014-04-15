@@ -1,0 +1,45 @@
+<div id="container" class="my_account">
+    <a class="back_to left" href="<?php echo $this->baseUrl('account/portfolio') . '/' . $this->sessionUsername;?>"> 
+        &laquo; Back to your portfolio page
+    </a>
+    <div class="right">
+        <div class="purple_button left">
+            <a href="<?php echo $this->baseUrl('account/portfolio') . '/' . $this->sessionUsername;?>">
+                MY PORTFOLIO<span>View my projects</span>
+            </a>
+        </div><!-- END gray_button   -->
+    </div>
+    <div class="clear"></div>
+    
+    <div class="main_box portfolio_add">
+        <h3>ADD NEW PORTFOLIO ITEM</h3>
+        <p style="color:red"><?php echo $this->error;?></p>
+        <div style="clear: both;"></div>
+        
+        <?php echo $this->form;?>
+        
+        <div class="upload_preview left">
+            <h3>UPLOAD PREVIEW</h3>
+            <span id="image"> </span>
+            <div class="clear"></div>
+        
+            <a class="change_image" href="javascript:trigger_input();">CHANGE IMAGE</a>
+        </div>
+        <div class="clear"></div>
+    </div><!-- END main_box   -->
+</div><!-- END container   -->
+    
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/add-portfolio.js')) ?>        
+
+<!--[if IE]>
+
+<?php $this->headStyle()->captureStart() ?>
+
+    .change_image{
+    display: none !important;
+    }
+
+<?php $this->headStyle()->captureEnd() ?>
+
+<![endif]-->

@@ -1,0 +1,106 @@
+<div id="container" class="acc_inbox"> 
+    
+    <?php echo $this->render('account/my-common.phtml');?>  
+    
+    <div class="main_box">
+        <h3 class="left"><?php echo strtoupper(@$this->sessionUsername)?>'S INBOX (<?php echo $this->unreadMessageCount;?> unread)</h3>
+        <div class="search_area right">
+            <input type="text" name="message_search" id="message_search" 
+                   value="<?php echo $this->messageSearchUser;?>" placeholder="SEARCH EMAIL" />
+            <a class="search_button" href="javascript:void(0);" onclick="search_func();"></a>
+        </div><!-- END search_area   -->
+        <div class="clear"></div>
+        <div class="pagination">
+            <?php echo $this->pagination?>
+        </div><!-- END mail_pagination   -->
+        <?
+        if(!empty($this->inboxList)) {
+        ?>
+        
+        <table class="acc_mail" width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr class="header_row">
+                <th class="large_cell first_cell" style="width:140px;"><span>MEMBER NAME</span></th>
+                <th class="small_cell" style="width:90px;"><span>STATUS</span></th>
+                <th class="large_cell" style="width: 300px;"><span>PROJECT NAME</span></th>
+                <th class="small_cell" style="width:100px;"><span>SENT DATE</span></th>
+                <th class="last_cell" style="width:170px;"></th>
+            </tr>
+            
+            <?     
+            foreach($this->inboxList as $msg) {
+              //$sql = "SELECT RECEIVER_read FROM job_message WHERE project_id = {$msg->getProjectId())} AND SENDER_user_id = {$msg->getSenderUserId()} AND RECEIVER_user_id = {$msg->getReceiverUserId()} AND RECEIVER_read = 0 LIMIT 1";
+              //$query = $this->db->query($sql);
+              $unread_check = 1;//$query->row_array();
+            ?>       
+            
+            <tr  class="<?if(!empty($unread_check)){ echo 'first_row unread_mail';}?>">
+                <td class="first_cell">
+                    <a style="color:<?if(!empty($unread_check)) echo "#2D90C9"; else echo "#787878";?>;"  
+                       href="<?php echo $this->baseUrl('account/project-inbox') . '/' . $msg->getProjectId()?>/<?php echo $msg->getSenderUserId();?>/">
+                        <?php echo $msg->getSenderUser()->getUsername();?> 
+                    </a>
+                </td>
+                <td>
+                    <a style="color:<?if(!empty($unread_check)) echo "#2D90C9"; else echo "#787878";?>;"  
+                       href="<?php echo $this->baseUrl('account/project-inbox') . '/' . $msg->getProjectId()?>/<?php echo $msg->getSenderUserId()?>/"> 
+                        <?if($msg->getReceiverRead() == 0){ echo 'Unread';} else {echo 'Read';}?>
+                    </a>
+                </td>
+                <td>
+                    <a style="color:<?if(!empty($unread_check)) echo "#2D90C9"; else echo "#787878";?>;"  
+                       href="<?php echo $this->baseUrl('account/project-inbox') . '/' . $msg->getProjectId()?>/<?php echo $msg->getSenderUserId()?>/"> 
+                        <?php echo $msg->getSubject();?> (<?php echo $msg->getTotalMessage()?>)
+                    </a>
+                </td>
+                <td>
+                    <?php echo date('d M Y', strtotime($msg->getCreatedOn()));?>
+                </td>  
+                <td  class="actions">
+                    <a title="click to view" 
+                       href="<?php echo $this->baseUrl('account/project-inbox') . '/' . $msg->getProjectId()?>/<?php echo $msg->getSenderUserId()?>/" 
+                       class="action_1">
+                    </a>
+                    <a title="delete this message" 
+                       href="javascript:void(0);" 
+                       onclick="delete_message_func('<?php echo $msg->getProjectId()?>','<?php echo $msg->getSenderUserId()?>')" class="delete">
+                    </a>
+                    <a title="click to view profile" 
+                       href="<?php echo $this->baseUrl('account/profile') . '/' . $msg->getSenderUser()->getUsername();?>" 
+                       class="action_2">
+                    </a>
+                </td>
+            </tr>    
+            
+            <?
+            }
+            ?>
+            
+        </table>
+        <div class="pagination">
+        <?php echo $this->pagination?>
+        </div><!-- END mail_pagination   -->
+        
+        <?
+        } else {
+        ?>
+        
+        <center>
+        <div style="height: 300px; color: #2b66c9;">
+            No data found!
+        </div>
+        </center>
+        
+        <?
+        }
+        ?>
+    </div><!-- END main_box   -->
+</div><!-- END container   -->
+
+<?php $this->headScript()->captureStart() ?>
+
+var url = '<?php echo $this->baseUrl('account/inbox');?>';
+var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/inbox.js')) ?>        

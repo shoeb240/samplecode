@@ -1,0 +1,23 @@
+
+<div class="submit_project" id="container">  
+    <div class="clear"></div>
+    <div class="main_box">
+        <h3>PROJECT BID</h3>
+        <label class="field_title">Project Name:</label> <?php echo $this->projectInfo->getProjectTitle();?>
+        <div class="clear"></div>
+        <label class="field_title">Project Cost:</label><?php echo $this->projectInfo->getCost(); //getCurrencyCode($project_overview['CurrencyCode']).?>
+        <div class="clear"></div>
+        <?php
+            echo $this->form;
+        ?>
+        <div class="clear" style="margin-top:50px;"></div>
+    </div><!-- END main_box   -->
+</div>
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/project-bid.js')) ?>
+
+<?php $this->headScript()->captureStart() ?>
+
+var project_cost = '<?php echo $this->projectInfo->getCost()?>';
+
+<?php $this->headScript()->captureEnd() ?>

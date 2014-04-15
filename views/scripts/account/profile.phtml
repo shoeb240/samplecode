@@ -1,0 +1,368 @@
+<?
+if( !empty($this->user)) {
+?>
+
+<div id="container" class="my_account member_profile">
+    <div class="clear"></div>
+    
+    <?
+    if( !$this->sessionUserId && $this->sessionUserId == $this->userId) {
+        echo $this->render('account/my-common.phtml');
+    } else if($this->sessionUserId) {
+        echo $this->render('account/common.phtml');
+    }
+    ?>
+
+    <div class="clear"></div>
+    <div class="cover_pic">
+
+        <?
+        if($this->sessionUserId && $this->sessionUserId == $this->userId) {
+        ?>
+
+        <div class="contain_buttons">
+            <center style="position: absolute; margin-right: 0;">
+                <img id="loading" src="<?php echo $this->baseUrl('images/loading.gif'); ?>" style="display:none;">
+            </center>
+
+            <div id="file-uploader-demo1"></div>
+            
+            <input type="hidden" name="cover_image" value="" id="cover_image"/>
+            
+        </div>
+
+        <?php
+        }
+
+        if($this->user->getCoverImage() != '') {
+        ?>
+
+        <span id="cover_image_span">
+            <img src="<?php echo $this->baseUrl('images/profile_image'); ?>/<?php echo $this->user->getCoverImage();?>" class="main_image">
+        </span>
+
+        <?php
+        } else {
+        ?>
+
+        <span id="cover_image_span">
+            <img src="<?php echo $this->baseUrl('images/member_profile_coverpic.jpg'); ?>" class="main_image">
+        </span>
+
+        <?php
+        }
+        ?>
+        
+        <ul>
+            
+        <?php
+        if(isset($this->portfolioList) && !empty($this->portfolioList)) {
+            foreach ($this->portfolioList as $key => $portfolio) {
+        ?>
+            
+            <li>
+                <a class="fancybox fancybox.iframe" 
+                   href="<?php echo $this->baseUrl('account/portfolio-details'); ?>/<?php echo $portfolio->getPortfolioId();?>">
+                    <img src="<?php echo $this->baseUrl('images/profile_image'); ?>/<?php echo $portfolio->getPortfolioImage();?>" />
+                </a>
+            </li>
+            
+            <?php
+            if($key >= 3) break;
+            }
+        }
+        ?>
+            
+        </ul>
+
+    </div>
+    <div class="clear"></div>
+    
+    <div class="main_box">
+        <center><p style="color:blue;margin-bottom:5px;margin-top:5px;"><?php echo $this->message;?></p></center>
+        <center><p style="color:red;margin-bottom:5px;margin-top:5px;"><?php echo $this->error;?></p></center>
+        <div class="clear"></div>
+
+        <h3><?php echo strtoupper($this->user->getUsername());?>'S PROFILE <? if($this->user->getIsPremium()==1) { ?>
+            <img src="<?php echo $this->baseUrl('images/featur_star_large.png'); ?>"/><? } ?> </h3>    
+        <div class="clear"></div>
+        <div class="left">
+            <div class="foto_box">
+                
+            <?
+            if ($this->user->getProfileImage() == '') {
+            ?>
+
+                <img src="<?php echo $this->baseUrl('images/no_image.png'); ?>" style="height:160px;width:160px;">
+
+            <? 
+            } else {
+            ?>
+                
+                <img src="<?php echo $this->baseUrl('images/profile_image/thumb'); ?>/<?php echo $this->user->getProfileImage();?>" 
+                     width="160" height="160" alt="profile_image"/>
+                
+            <?
+            }
+            ?>
+
+            </div>   
+        </div>
+        <div class="left myaccount_info profile_info">
+            <label class="field_title">Username : </label>
+            <span><?php echo $this->user->getUsername();?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Full Name :</label>
+            <span><?php echo $this->user->getFullName();?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Primary Category :</label>
+            <span><?php echo $this->user->getPrimaryCategory()->getCategoryTitle();?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Company :</label>
+            <span><?php echo $this->user->getCompany();?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">NRIC / ROC Number :</label>
+            <span><?php echo $this->user->getNricRocNumber();?></span>
+            <div class="clear"></div>
+        </div><!-- END myaccount_info   -->
+        <div class="right myaccount_info">
+            <h2 style="text-transform:uppercase;">FROM CATEGORY: <?php echo $this->user->getPrimaryCategory()->getCategoryTitle();?></h2>
+            <label class="field_title">Last Login :</label>
+            <span><? echo @date('d M Y', strtotime($this->user->getLastLogin()));?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Rating :</label><span><? echo 'Level ' . $this->user->getRating();?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Member Since :</label>
+            <span><? echo @date('d M Y', strtotime($this->user->getCreatedOn()));?></span>
+            <div class="clear"></div>
+
+            <label class="field_title">Hired :</label>
+            <span>
+                <?php if($this->user->getUserHired() != null) { echo $this->user->getUserHired();} else { echo '0';}?> Member
+                <?php if($this->user->getUserHired() > 0) echo 's'?>
+            </span>
+            <div class="clear"></div>
+
+            <label class="field_title">Worked on :</label>
+            <span>
+                <?php if($this->user->getUserWorked() != null) { echo $this->user->getUserWorked();} else { echo '0';}?> Project
+                <?php if($this->user->getUserWorked() > 0) echo 's'?>
+            </span>
+            <div class="clear"></div>
+        </div><!-- END myaccount_info   -->
+        <div class="clear"></div>
+        <div class="latest_project">
+            <h3>LATEST PROJECTS</h3>
+
+            <?
+            if(isset($this->projectsOwn) && !empty($this->projectsOwn)) {
+                foreach($this->projectsOwn as $project) {
+            ?>
+
+            <div class="project_box left">
+                <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $project->getProjectId();?>" 
+                   class="blue_title">
+                    <?php echo $project->getProjectTitle();?>
+                </a>
+                <span class="gray_text">Status : Bid (<?php echo $project->getTotalBid();?> bids)</span>
+                <span class="gray_text">Assigned to : 
+
+                <? 
+                if(!empty($this->assignedProjectsUsers[$project->getProjectId()])) { 
+                    echo '<a style="color: blue;" href="' . $this->baseUrl('account/profile') 
+                         . '/'.$this->assignedProjectsUsers[$project->getProjectId()]['username'].'">' 
+                         . $this->assignedProjectsUsers[$project->getProjectId()]['username'] . '</a>' . '&nbsp&nbsp';
+                } else { 
+                    echo 'N.A.';
+                } 
+                ?>
+
+                </span>
+                <span class="gray_text">Bid ending : <? echo @date('d M Y', strtotime($project->getBidEndingDate()));?></span>
+            </div><!-- END project_box (1)   -->
+
+            <?
+                }
+            } else {
+            ?>
+
+            <span class="gray_text">No projects submitted yet.</span>
+
+            <?
+            }
+            ?>
+
+            <div class="clear"></div>	
+        </div><!-- END latest_project   -->
+        <div class="latest_testimonials">
+            <h3>LATEST TESTIMONIALS</h3>
+            
+            <?
+            if(isset($this->testimonials) && !empty($this->testimonials)) {
+                $count = 1;
+                foreach($this->testimonials as $testimonial) {
+                    if($count>3) break;
+                    if($testimonial->getOwnerUserId() == $this->userId) { 
+                       $userIdTestimonial = $testimonial->getBidderUserId();
+                       //$feedbackRate = $testimonial->getBidderFeedbackRate();
+                       $comment = $testimonial->getBidderComment();
+                       $date = date('d M Y H:i:s',strtotime($testimonial->getBidderPostDate())); 
+                    } else if($testimonial->getBidderUserId() == $this->userId) {  
+                       $userIdTestimonial = $testimonial->getOwnerUserId();
+                       //$feedbackRate = $testimonial->getOwnerFeedbackRate();
+                       $comment = $testimonial->getOwnerComment();
+                       $date = date('d M Y H:i:s',strtotime($testimonial->getOwnerPostDate()));   
+                    }
+            ?>
+
+            <p class="left">
+                <?php echo $comment?><br /><br />
+                <a class="blue_title" href="<?php echo $this->baseUrl('account/profile') 
+                                                       . '/' . $this->userTestimonials[$userIdTestimonial];?>">
+                    <?php echo '- ' . $this->userTestimonials[$userIdTestimonial]?>, <?php echo $date?>
+                </a>
+            </p>
+
+            <?
+                $count++;
+            }
+            ?>
+
+            <div class="clear"></div>
+
+            <?
+            if(sizeof($this->testimonials) > 3) {
+            ?>
+
+            <a class="see_more_testim" href="<?php echo $this->baseUrl('account/testimonials') 
+                                                        . '/' . $this->user->getUsername()?>">See more testimonials</a>
+
+            <?
+            }
+            
+        } else {
+        ?>
+
+            <span class="gray_text">No testimonials found.</span>
+
+        <?
+        }
+        ?>
+
+        </div><!-- END latest_testimonials   -->
+        <div class="portfolio">
+            <h3>PORTFOLIO 
+                
+                <?php if(isset($this->portfolioList) && sizeof($this->portfolioList) >= 1) { ?>
+                
+                <a style="text-decoration: none; font-size: 16px; text-transform: lowercase; color: gray" 
+                   href="<?php echo $this->baseUrl('account/portfolio') . '/' . $this->user->getUsername()?>">
+                View all
+                </a>
+                
+                <?php } ?>
+                
+            </h3>
+            
+            <?php
+            if(isset($this->portfolioList) && !empty($this->portfolioList)) {
+            ?>
+
+            <div class="contain">
+                <img class="prev" src="<?php echo $this->baseUrl('images/left_arrow.png'); ?>">
+                <div class="portfolio_gal">
+                    <ul>
+                        
+                        <?php
+                        foreach ($this->portfolioList as $portfolio) {
+                        ?>
+                        
+                        <li>
+                            <a class="fancybox fancybox.iframe" 
+                               href="<?php echo $this->baseUrl('account/portfolio-details'); ?>/<?php echo $portfolio->getPortfolioId();?>">
+                                <img src="<?php echo $this->baseUrl('images/profile_image'); ?>/<?php echo $portfolio->getPortfolioImage();?>" />
+                            </a>
+                        </li>
+                        
+                        <?php
+                        }
+                        
+                        if(sizeof($this->portfolioList) == 1) echo '<li></li>';
+                        ?>
+                        
+                    </ul>
+                </div>
+                <img class="next" src="<?php echo $this->baseUrl('images/right_arrow.png'); ?>">
+            </div>
+
+            <?php
+            } else {
+            ?>
+
+            <span class="gray_text">No projects found.</span>
+
+            <?php
+            }
+            ?>
+
+        </div>
+    </div><!-- END main_box   -->
+</div><!-- END container   -->
+
+<?
+} else {
+?>
+
+<center>
+    <div style="height: 300px; color: #2b66c9;">
+        No user found!
+    </div>
+</center>
+
+<?
+}
+?>
+
+<?php $this->headStyle()->captureStart() ?>
+
+    var upload_button_name  = 'CHANGE COVER';
+    var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+    
+<?php $this->headStyle()->captureEnd() ?>
+
+<?php $this->headLink()->appendStylesheet($this->baseUrl('scripts/without-flash-uploader/fileuploader.css')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/jquery.fancybox.pack.js')) ?>
+<?php $this->headLink()->appendStylesheet($this->baseUrl('styles/jquery.fancybox.css')) ?>       
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/jcarousellite_1.0.1.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/without-flash-uploader/fileuploader.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/profile.js')) ?>
+
+
+<?php $this->headStyle()->captureStart() ?>
+    
+    .cover_pic .qq-upload-button {
+    background-image: url("../../images/change_cover_button.png");
+    color: #545454;
+    display: block;
+    font-family: Tahoma;
+    font-size: 17px;
+    font-weight: bold;
+    height: 38px;
+    line-height: 40px;
+    position: absolute !important;
+    right: 38px;
+    text-align: center;
+    text-shadow: 0 1px #FFFFFF;
+    top: 30px;
+    width: 188px;
+}
+
+<?php $this->headStyle()->captureEnd() ?>
+
+

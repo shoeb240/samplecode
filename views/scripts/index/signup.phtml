@@ -1,0 +1,29 @@
+<div id="container" class="signup_page">
+    <div class="purple_button left">
+        <a href="#">REGISTRATION<span>Fill up your particulars</span></a>
+        <center><p style="color:red;"><?php echo $this->error;?></p></center>
+    </div><!-- END purple_button   -->
+    
+    <div class="green_button right">
+        <a href="#">ABOUT PREMIUM MEMBERSHIP<span>Find out the perks of premium membership</span></a>
+    </div><!-- END green_button   -->
+    <div class="clear"></div>
+    
+    <div class="main_box">
+        <h3>REGISTRATION FORM</h3>
+        
+        <?php echo $this->form;?>
+        
+        <div class="clear"></div>
+    </div><!-- END home_banner   -->
+</div><!-- END container   -->
+
+<?php $this->headScript()->captureStart() ?>
+
+var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+
+<?php $this->headScript()->captureEnd() ?>
+
+<?php $this->headLink()->appendStylesheet($this->baseUrl('scripts/without-flash-uploader/fileuploader.css')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/without-flash-uploader/fileuploader.js')) ?>
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/signup.js')) ?>

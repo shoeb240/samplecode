@@ -1,0 +1,174 @@
+<?php $this->headStyle()->captureStart() ?>
+
+a.current_page {color: #0A8FDB;}
+
+<?php $this->headStyle()->captureEnd() ?>
+
+<div id="container" class="projects">
+    <div class="main_box left members_list project_list">
+        <h3 class="left">LATEST JOB POSTINGS ONLINE</h3>
+        <div class="search_area right">
+            <form name="job_search_Frm" method="post" action="<?php echo $this->baseUrl('project/job_search'); ?>">
+                <input type="text" name="job_search" id="job_search" placeholder="SEARCH FOR A JOB" />
+                <a class="search_button" href="javascript:void(0);" onclick="job_search_func()"></a>
+            </form>
+        </div><!-- END search_area   -->
+        <div class="clear"></div>
+        
+        <div class="pagination left">
+            <?php echo $this->pagination; ?> 
+        </div><!-- END pagination   -->
+        
+        <?php echo $this->partial('project/_sorting-links.phtml', 
+                                  array('action' => 'index', 'searchType' => $this->searchType));?>
+        
+        <?
+        if(!empty($this->projectListPremium)) {
+            foreach ($this->projectListPremium as $premiumProject) {
+        ?>
+        
+        <div class="project_box left res_pro">
+            <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $premiumProject->getProjectId()?>/" 
+               class="blue_title">
+                
+            <?
+            if(strlen($premiumProject->getProjectTitle())<18) {
+                echo $premiumProject->getProjectTitle();
+            } else {
+                echo substr($premiumProject->getProjectTitle(),0,18)."...";
+            }
+            ?>
+                
+            </a>
+            <span class="gray_text">Status : Bid (<?php echo $premiumProject->getTotalBid()?> bids)</span>
+            <span class="gray_text">Assigned to : 
+                
+            <? 
+            if(!empty($this->assignedProjectsUsers[$premiumProject->getProjectId()])) {
+                echo $this->assignedProjectsUsers[$premiumProject->getProjectId()]['username'];
+            } else {
+                echo "N.A";
+            }
+            ?>  
+                
+            </span>
+            <span class="gray_text">Bid ending : 
+            <?php echo date('d M Y',strtotime($premiumProject->getBidEndingDate())); ?>
+            </span>
+            <div class="blue_button">
+                <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $premiumProject->getProjectId()?>/">
+                    BUDGET : &lt; $<?php echo round($premiumProject->getCost());?>
+                </a>
+            </div><!-- END blue_button   -->
+        </div><!-- END project_box (1)   -->
+        
+        <?
+            }
+        }  
+        ?>  
+
+        <div class="clear"></div>
+        
+        <?
+        if(!empty($this->projectListDefault)) {
+            foreach ($this->projectListDefault as $defaultProject) {
+        ?>
+        
+        <div class="project_box left">
+            <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $defaultProject->getProjectId()?>/" class="blue_title">  
+                
+            <?
+            if(strlen($defaultProject->getProjectTitle())<18) {
+                echo $defaultProject->getProjectTitle();
+            } else {
+                echo substr($defaultProject->getProjectTitle(),0,18)."...";
+            }  
+            ?>
+                
+            </a>
+            <span class="gray_text">Status : Bid (<?php echo $defaultProject->getTotalBid()?> bids)</span>
+            <span class="gray_text">Assigned to : 
+                
+            <? 
+            if(!empty($this->assignedProjectsUsers[$defaultProject->getProjectId()])) {
+                echo $this->assignedProjectsUsers[$defaultProject->getProjectId()]['username'];
+            } else {
+                echo "N.A";
+            }
+            ?>
+                
+            </span>
+            <span class="gray_text">Bid ending :
+            <?php echo date('d M Y',strtotime($defaultProject->getBidEndingDate())); ?>
+            </span>
+            <div class="orange_button">
+                <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $defaultProject->getProjectId()?>/">
+                    BUDGET : &lt; $<?php echo round($defaultProject->getCost())?>
+                </a>
+            </div><!-- END blue_button   -->
+        </div><!-- END project_box (1)   -->
+        
+        <?
+            }
+        }  
+        ?>  
+
+        <div class="clear"></div>
+
+        <div class="pagination">
+            <?php echo $this->pagination;?> 
+        </div><!-- END mail_pagination   -->
+    </div><!-- END project_list   -->
+    <div class="main_box right new_in_cat">
+        <h3><?if(!empty($this->categoryName)) echo $this->categoryName; else echo "NEW CATEGORY PROJECT"?></h3>
+        
+        <?
+        if($this->projectsByCategory) {
+            foreach ($this->projectsByCategory as $premiumProject) {
+        ?>
+        
+        <div class="project_box">
+            <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $premiumProject->getProjectId()?>/" class="blue_title">  
+                
+            <?
+            if(strlen($premiumProject->getProjectTitle())<18) {
+                echo $premiumProject->getProjectTitle();
+            } else {
+                echo substr($premiumProject->getProjectTitle(),0,18)."...";
+            }
+            ?>
+                
+            </a>
+            <span class="gray_text">Status : Bid (<?php echo $premiumProject->getTotalBid()?> bids)</span>
+            <span class="gray_text">Assigned to :
+                
+            <? 
+            if(!empty($this->assignedProjectsUsers[$premiumProject->getProjectId()])) {
+                foreach($this->assignedProjectsUsers[$premiumProject->getProjectId()] as $row_username) {
+                    echo  $row_username['username'] . ' ';
+                }
+            } else {
+                echo "N.A";
+            }
+            ?> 
+                
+            </span>
+            <span class="gray_text">Bid ending : 
+                <?php echo date('d M Y',strtotime($premiumProject->getBidEndingDate())); ?>
+            </span>
+        </div><!-- END project_box (1)   -->
+        
+        <?
+            }
+        }   
+        ?>   
+        
+    </div><!-- END new_in_cat   -->
+
+    <?php echo $this->render('bottom-three-btn.phtml');?>
+
+    <div class="clear"></div>
+</div><!-- END container   -->
+
+    
+   

@@ -1,0 +1,102 @@
+<div class="submit_project" id="container">
+    <div class="purple_button left">
+        <a href="#">SUBMIT PROJECT<span>Tell us about your project</span></a>
+    </div><!-- END purple_button   -->
+    <div class="brown_button right">
+        <a href="#">3 REASONS TO USE OUR SITE<span>Find out more about the perks of using our website</span></a>
+    </div><!-- END green_button   -->
+    <div class="clear"></div>
+    
+    <div class="main_box">
+        <h3>PROJECT DETAILS</h3>
+        <label class="field_title">Project Title* :</label>
+        <label class="project_info"><?php echo $this->project->getProjectTitle();?></label>
+        <div class="clear"></div>
+
+        <label class="field_title left">Description* :</label>
+        <label class="project_info left">
+            <?php echo $this->project->getProjectDescription();?>
+        </label>
+        <div class="clear"></div>
+
+        <div class="left">
+            <label class="field_title left">Primary Category* :</label>
+            <label class="project_info"><?php echo $this->primaryCategoriyTitle;?></label>
+            <div class="clear"></div>
+
+            <label class="field_title">Budget* :</label>
+            <label class="project_info"><?echo $this->project->getCost() . ' ' . $this->project->getCurrencyCode();?></label>
+            <div class="clear"></div>
+
+            <label class="field_title">Bid ending date* :</label>
+            <label class="project_info"><?php echo date('d M Y',strtotime($this->project->getBidEndingDate()))?></label>
+            <div class="clear"></div>
+
+            <label class="field_title">Additional Remarks :</label>
+            <label class="project_info"><?if($this->project->getAdditionalRemarks() != '') echo $this->project->getAdditionalRemarks(); else echo "N.A.";?></label>
+            <div class="clear"></div>
+        </div>
+
+        <div class="left message_attachment conf_proj">
+            <h5>ATTACHMENT</h5>
+
+            <?
+            $attachment1 = $this->projectAttachment->getAttachment();
+            if(!empty($attachment1)) {
+            ?>
+
+            <span class="attch_note"><?php echo $attachment1;?> attached</span>
+            <div class="clear"></div>
+
+            <?
+            }
+            if(!empty($attachment2)) {
+            ?>
+
+            <span class="attch_note"><?echo $attachment2;?> attached</span>
+            <div class="clear"></div>
+
+            <?
+            }
+
+            if(empty($attachment1) && empty($attachment2)) {
+            ?>
+
+            <span class="attch_note">No attach file</span>
+            <div class="clear"></div>
+
+            <?
+            }
+            ?> 
+
+        </div><!-- END message_attachment   -->
+        <div class="clear"></div>
+        <h2>OPTIONAL</h2>
+        <p class="left">
+            <label class="field_title">Additional Information :</label>
+            <span class="note add_option">
+                (This allows bidders to know
+                your specific requirements
+                a little better, e.g. if there is a
+                need for meet-up, etc.)
+            </span>
+        </p>    
+        <p class="left optinal">
+            <input type="checkbox" name="meet_up_required" id="meet_up_required" 
+                   disabled <?if($this->project->getMeetUpRequired() == 1) {?> checked="checked"<?}?> value="1" >
+            <label class="project_info">Meet up required</label><br><br>
+            
+            <input type="checkbox" name="milestone_payments" id="milestone_payments" 
+                   disabled <?if($this->project->getMilestonePayments()==1){?> checked="checked"  <?}?> value="1">
+            <label class="project_info">Milestone payments (e.g. deposit payments)</label><br><br>
+            
+            <input type="checkbox" name="require_portfolio" id="require_portfolio" 
+                   disabled <?if($this->project->getRequirePortfolio()==1){?> checked="checked" <?}?> value="1">
+            <label class="project_info">Require portfolio / proposal for submission</label>
+        </p>
+        <div class="clear"></div>
+
+        <?php echo $this->form;?>
+
+        <div class="clear"></div>
+    </div><!-- END main_box   -->

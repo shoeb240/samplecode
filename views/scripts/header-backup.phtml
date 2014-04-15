@@ -1,0 +1,227 @@
+<?php
+$authIdentity = false;
+$auth = Zend_Auth::getInstance();
+if ($auth->hasIdentity()) {
+    $authIdentity = $auth->getIdentity();
+}
+
+$front = Zend_Controller_Front::getInstance();
+$page = $front->getRequest()->getControllerName();
+?>
+
+<form id="fbFrm" name="fbFrm" method="post" action="<?php echo $this->baseUrl('index/facebook_login'); ?>">
+    <input id="user_fb_id" name="user_fb_id" type="hidden" />
+    <input id="user_fb_email" name="user_fb_email" type="hidden" />
+    <input id="user_fb_name" name="user_fb_name" type="hidden" />
+    <input id="user_fb_photo" name="user_fb_photo" type="hidden" />
+</form> 
+
+<header>
+    <a href="<?php echo $this->baseUrl('/'); ?>" id="site_logo" class="left"><img src="<?php echo $this->baseUrl('images/site_logo.png'); ?>" alt="" /></a>
+    <div class="left header_leftsection">
+        <div class="right login_area">
+            <a class="twitter" href="https://twitter.com/#!/abc" target="_blank"></a>
+            <a class="facebook" href="http://www.facebook.com/abc" target="_blank"></a>
+            
+            <?php 
+            if($authIdentity) {   
+            ?>
+            
+            <a class="login" href="<?php echo $this->baseUrl('index/logout'); ?>">logout</a>
+            <span>|</span> 
+            <?php echo $this->placeholder('inbox');?>
+                
+            <?php 
+            } else { 
+            ?>
+            
+            <a class="login" href="<?php echo $this->baseUrl('index/login'); ?>">login</a>
+            <span>|</span>
+            <a class="signup" href="<?php echo $this->baseUrl('index/signup'); ?>"> REGISTER NOW<!--SIGNUP (FREE MEMBERSHIP!)--></a>
+            
+            <?php 
+            } 
+            ?>
+            
+            <div class="clear"></div>
+        </div><!-- END login_area   -->
+        <div class="clear"></div>
+        
+        <div id="menu_tap">
+            <div class="left_bg"></div>
+            <div class="bottom_bg"></div>
+            <nav class="left main_menu">
+                <ul> <!--  class="sf-menu" -->
+                    
+                    <li><a href="<?php echo $this->baseUrl('/'); ?>" <?php if($page == 'index'){?>class="topmenu_active" <?php } ?>>Home</a></li>
+                    <li><a href="<?php echo $this->baseUrl('project'); ?>" <?php if($page == 'project'){?>class="topmenu_active" <?php } ?>>PROJECTS</a>
+                        <ul>
+                            
+                            <?php
+                            if($authIdentity) {
+                            ?>  
+                            
+                            <li><a href="<?php echo $this->baseUrl('project/project-submit'); ?>">SUBMIT PROJECT</a></li>
+                            <li><a href="<?php echo $this->baseUrl('project'); ?>">PROJECT LISTING</a></li>
+                            <li><a href="<?php echo $this->baseUrl('project/active-projects'); ?>">ACTIVE PROJECTS</a></li>
+                            <li><a href="<?php echo $this->baseUrl('project/feedbacks-by-me'); ?>">FEEDBACK</a></li>
+                            <li><a href="<?php echo $this->baseUrl('project/archive-projects'); ?>">ARCHIVE</a></li> 
+                            
+                            <?php
+                            }
+                            ?>  
+                            
+                        </ul>
+                    </li>
+                    <li><a href="<?php echo $this->baseUrl('member'); ?>" <?php if($page == 'member'){?>class="topmenu_active" <?php } ?>>MEMBER LIST</a>
+                        <ul>
+                        <li><a href="<?php echo $this->baseUrl('member/featured-members'); ?>">FEATURED</a></li>
+                        <li><a href="<?php echo $this->baseUrl('member'); ?>">MEMBER LISTING</a></li>
+                        
+                        <?php
+                        if($authIdentity) {
+                        ?>
+                        
+                        <li><a href="<?php echo $this->baseUrl('member/current-hired-members'); ?>">CURRENT HIRES</a></li>
+                        <li><a href="<?php echo $this->baseUrl('member/bookmarks'); ?>">BOOKMARKS</a></li> 
+                        
+                        <?php
+                        }
+                        ?>
+
+                        </ul>
+                    </li>
+                    
+                    <?php
+                    if($authIdentity) {
+                    ?>
+                    
+                    <li><a href="<?php echo $this->baseUrl('account/profile'); ?>/<?php echo $authIdentity;?>" <?php if($page == 'account'){?>class="topmenu_active" <?php } ?>>MY ACCOUNT</a>
+                        <ul>
+                            <li><a href="<?php echo $this->baseUrl('account/inbox'); ?>">INBOX</a></li>
+                            <li><a href="<?php echo $this->baseUrl('account/outbox'); ?>">OUTBOX</a></li>
+                            <li><a href="<?php echo $this->baseUrl('account/edit-profile'); ?>">EDIT PROFILE</a></li>
+                            <li><a href="<?php echo $this->baseUrl('account/profile'); ?>/<?php echo $authIdentity?>">VIEW PROFILE</a></li>
+                            <li><a href="<?php echo $this->baseUrl('account/portfolio'); ?>/<?php echo $authIdentity;?>">MY PORTFOLIO</a></li>
+                        </ul>
+                    </li>
+                    
+                    <?php
+                    }
+                    ?>
+                    
+                </ul>
+            </nav>    <!-- END main_menu   -->
+            
+            <div class="search_area left">
+                <form name="creative_search_Frm" method="post" action="<?php echo $this->baseUrl('member/creative-search'); ?>">
+                    <input type="text" name="creative_search" id="creative_search" placeholder="SEARCH CREATIVES" />
+                    <a class="search_button" href="javascript:void(0);" onclick="creative_search_func()"></a>
+                </form>
+            </div><!-- END search_area   -->
+            
+        </div><!-- END menu_tap   -->
+        
+    </div><!-- END header_left-section   -->
+    <div class="clear"></div>
+</header><!-- END header   -->
+<div id="fb-root"></div>
+
+<script>
+function setLoggedUser(userName,email,userId)
+{
+
+    <?php
+    if(!isset($_SESSION['facebook_loggedin'])) {
+    ?>
+
+        $('#user_fb_id').val(userId);
+        $('#user_fb_email').val(email);
+        $('#user_fb_name').val(userName);
+        $('#user_fb_photo').val('https://graph.facebook.com/'+ userId +'/picture');
+        document.forms.fbFrm.submit(); 
+
+     <?php
+     }
+     ?> 
+
+}
+
+function setLoggedOut()
+{
+    uri = '<?php echo $this->baseUrl('index/facebook_logout'); ?>';
+    window.location.href = uri;  
+}
+
+window.fbAsyncInit = function(){
+    FB.init({ appId: '417269798284871', 
+        status: true, 
+        cookie: true,
+        xfbml: true,
+        oauth: true});
+
+    function updateButton(response) 
+    {
+        var button = document.getElementById('fb-auth'); 
+        if (response.authResponse) {
+              FB.api('/me', function(response) 
+              {
+                  //$("#fb-auth").removeClass("facebookLoginBtn").addClass("facebookLogoutBtn");
+                  setLoggedUser(response.name,response.email,response.id);
+              });
+              button.onclick = function() 
+              {
+                  FB.logout(function(response) 
+                  {
+                      setLoggedOut();
+                      //$("#fb-auth").removeClass("facebookLogoutBtn").addClass("facebookLoginBtn"); 
+                  });
+              };
+        } else {
+            //user is not connected to your app or logged out
+            //button.innerHTML = 'Login';
+            button.onclick = function() 
+            {
+                FB.login(function(response) 
+                {
+                    if (response.authResponse) {
+                        FB.api('/me', function(response) 
+                        {
+                            //var userInfo = document.getElementById('user-info');
+                            //userInfo.innerHTML =  '<img src="https://graph.facebook.com/'  + response.id + '/picture" style="margin-right:5px"/>'  + response.name;
+                        });       
+                    } else {
+                        //user cancelled login or did not grant authorization
+                    }
+                }, {scope:'email'});      
+            }
+        }
+    }
+
+    // run once with current status and whenever the status changes
+    FB.getLoginStatus(updateButton);
+    FB.Event.subscribe('auth.statusChange', updateButton);    
+};
+
+(function() 
+{
+    var e = document.createElement('script'); 
+    e.async = true;
+    e.src = document.location.protocol  + '//connect.facebook.net/en_US/all.js';
+    document.getElementById('fb-root').appendChild(e);
+}());  
+</script>  
+
+
+<script>
+function creative_search_func()
+{
+    var creative_search = document.getElementById('creative_search').value; 
+    if(creative_search=='') {
+        alert('Please insert a creative member name!');
+        return false;
+    } else {
+        document.forms.creative_search_Frm.submit();
+    }
+}
+</script>

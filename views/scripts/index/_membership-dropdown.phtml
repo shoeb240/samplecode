@@ -1,0 +1,21 @@
+<div id="premium_show_hide" style="<?php if(!$this->display){ echo 'display: none;';}?>">
+    <h2>OPTIONAL</h2>
+    <label class="field_title left"><?php echo $this->element->getLabel();?> : </label>
+    
+    <?php 
+    echo $this->{$this->element->helper}(
+             $this->element->getName(),
+             $this->element->getValue(),
+             $this->element->getAttribs(),
+             $this->element->getMultiOptions()
+         ) 
+    ?>
+    
+ </div>
+ <div class="clear"></div>
+ <span class="note">
+     (Premium membership allows
+     unlimited bids any time of the
+     year, And are featured to
+     potential clients)
+ </span>

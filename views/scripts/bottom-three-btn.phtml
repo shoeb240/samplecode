@@ -1,0 +1,27 @@
+<div class="clear"></div>
+
+ <?
+ if(isset($_SESSION['user_logged_in']))
+ {
+ ?>
+
+     <div class="purple_button left">
+       <a href="<?php echo $this->baseUrl('project/project-submit'); ?>">
+           SUBMIT PROJECT<span>Put your project up for bids</span>
+       </a> 
+     </div><!-- END purple_button   -->
+
+     <div class="blue_button left">
+         <a href="<?php echo $this->baseUrl('member'); ?>">
+             FIND A CREATIVE<span>Find a suitable creative partner</span>
+         </a>
+     </div><!-- END blue_button   -->
+     <div class="green_button left">
+         <a href="<?php echo $this->baseUrl('project/active-project'); ?>">
+             CURRENT PROJECT<span>View all your active projects</span>
+         </a>
+     </div><!-- END green_button   -->
+     
+<?
+ }
+?>

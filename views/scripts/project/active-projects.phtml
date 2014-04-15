@@ -1,0 +1,89 @@
+<div id="container" class="projects">
+    <div class="main_box left members_list project_list member_project" style="width:920px;">
+        <!--h3 class="left">ACTIVE PROJECT LIST</h3-->    
+        
+        <?php echo $this->partial('project/_projects-tab.phtml', 
+                                  array('tabActive1' => 'active', 'tabActive2' => ''));?>
+        
+        <div class="pagination left" style="margin-top:20px;">
+         <?php echo $this->pagination?>
+        </div><!-- END pagination   -->
+        
+        <?php echo $this->partial('project/_sorting-links.phtml', 
+                                  array('action' => 'active-projects', 'searchType' => $this->searchType));?>
+        
+        <?php
+        if(!empty($this->activeProjects)) {
+            foreach ($this->activeProjects as $activeProject) {
+        ?>
+        
+        <div class="project_box left">
+            <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $activeProject->getProjectId()?>/" 
+               class="blue_title">
+
+            <?php
+            if(strlen($activeProject->getProjectTitle()) < 18) {
+                echo $activeProject->getProjectTitle();
+            } else {
+                echo substr($activeProject->getproject_title(),0,18)."...";
+            }
+            ?>
+
+            </a>
+            <span class="gray_text">Status : Bid (<?php echo $activeProject->getTotalBid()?> bids)</span>
+            <span class="gray_text">Assigned to : 
+
+            <? 
+            if(!empty($this->assignedProjectsUsers[$activeProject->getProjectId()])) {
+                echo  $this->assignedProjectsUsers[$activeProject->getProjectId()]['username'] . ' ';
+            } else {
+                echo "N.A";
+            }
+            ?>  
+
+            </span>
+            <span class="gray_text">Bid ending : 
+                <?php echo date('d M Y',strtotime($activeProject->getBidEndingDate())); ?>
+            </span>   
+            <div class="purple_button">
+                <a href="<?php echo $this->baseUrl('project/project-details'); ?>/<?php echo $activeProject->getProjectId()?>/">
+                    BUDGET : &lt; $<?php echo round($activeProject->getCost());?>
+                </a>
+            </div><!-- END blue_button   -->
+            <span>
+
+            <?php 
+            if($activeProject->getProjectStatus() == 'closed') {
+                if(!$activeProject->getOwnerFeedbackGiven()) {
+            ?>
+
+                <a  href="<?php echo $this->baseUrl('project/owner-rating'); ?>/<?php echo $activeProject->getProjectId()?>/<?php echo $activeProject->getAssignedUserId()?>" 
+                    style="color:blue;font-size:10px;" >
+                    give feedback for this project
+                </a> 
+
+            <?
+                }  
+            }
+            ?>
+
+            </span>
+        </div><!-- END project_box (1)   -->
+
+        <?php
+            }
+        } else echo "<center><h3>No own project have you.</h3></center>"; 
+        ?>     
+
+        <div class="clear"></div>
+
+        <div class="pagination">
+            <?php echo $this->pagination;?> 
+        </div><!-- END mail_pagination   -->
+    <!-- END project_list   -->   
+    </div><!-- END new_in_cat   -->
+
+    <?php echo $this->render('bottom-three-btn.phtml');?>
+
+    <div class="clear"></div>
+</div><!-- END container   -->

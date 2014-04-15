@@ -1,0 +1,20 @@
+<div class="pagination right">
+    <span><b>Sort : </b></span>
+    <a <? if($this->searchType == '' || $this->searchType == 'latest'){ ?> class="current_page"<? }?> 
+       href="<?php echo $this->baseUrl('project/' . $this->action . '/latest'); ?>">
+        Latest
+    </a><span> / </span>
+    <a <? if($this->searchType == 'budget'){ ?> class="current_page"<? }?> 
+       href="<?php echo $this->baseUrl('project/' . $this->action . '/budget'); ?>"> 
+        Budget 
+    </a><span> / </span>
+    <a <? if($this->searchType == 'closing-date'){ ?> class="current_page"<? }?> 
+       href="<?php echo $this->baseUrl('project/' . $this->action . '/closing-date'); ?>"> 
+        Closing Date 
+    </a><span> / </span>
+    <a <? if($this->searchType == 'alphabetical'){ ?> class="current_page"<? }?> 
+       href="<?php echo $this->baseUrl('project/' . $this->action . '/alphabetical'); ?>"> 
+        Alphabetical 
+    </a>
+</div><!-- END pagination   -->
+<div class="clear"></div>

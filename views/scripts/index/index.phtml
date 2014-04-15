@@ -1,0 +1,94 @@
+<center><p style="color:blue;margin-bottom:5px;"><?php echo $this->message;?></p></center>
+<center><p style="color:red;margin-bottom:5px;"><?php echo $this->error;?></p></center>
+<div class="home_banner">
+    <div class="left">
+        <h1>FIND CREATIVE <br />FREELANCERS.<br />JUST SIMPLY DONE.</h1>
+        <a class="signup_member" href="<?php echo $this->baseUrl('index/signup'); ?>">SIGN UP AS A MEMBER (FOR FREE!)</a>
+    </div>
+    <img src="<?php echo $this->baseUrl('images/home_main_image1.jpg'); ?>" alt="" />
+    <div class="clear"></div>
+</div><!-- END home_banner   -->
+
+<div class="home_signup_option">
+    
+    <?php   
+    if(isset($_SESSION['session_user_id'])){
+    ?>
+    
+    <div class="purple_button left">
+        <a href="<?php echo $this->baseUrl('project/project_submit');?>">
+            SUBMIT PROJECT<span>Put your project up for bids</span>
+        </a>
+    </div><!-- END purple_button   -->
+    <div class="blue_button left">
+        <a href="<?php echo $this->baseUrl('member'); ?>">
+            FIND A CREATIVE<span>Find a suitable creative partner</span>
+        </a>
+    </div><!-- END blue_button   -->
+    
+    <?php
+        }
+    ?>
+    
+    <div class="gray_button left">
+        <a href="<?php echo $this->baseUrl('index/signup'); ?>">
+            SIGN UP FOR A PREMIUM ACCOUNT AND GET FEATURED
+            <span>While membership is free, getting a premium account allows you more. Find out.</span>
+        </a>
+    </div><!-- END gray_button   -->
+    <div class="clear"></div>
+</div><!-- END home_signup_option   -->
+
+<div class="reccommended_memb">
+    <div class="featured_mark"></div>
+    <h3>RECCOMMENDED PREMIUM MEMBERS</h3>
+    
+    <?php 
+    foreach ($this->membersPremium as $user){
+    ?>  
+    
+    <div class="rec_memb_box left">
+        <div class="foto_box left">
+            <a href="<?php echo $this->baseUrl('account/profile'); ?>/<?php echo $user->getUsername()?>"> 
+             
+            <?php
+            if($user->getProfileImage() == ''){    
+            ?>
+             
+            <img src="<?php echo $this->baseUrl('images/no_image.png'); ?>" style="height:88px;width:88px;">  
+            
+            <?php
+            } else {
+            ?>
+            
+            <img src="<?php echo $this->baseUrl('images/profile_image/thumb'); ?>/<?php echo $user->getProfileImage()?>" 
+                 style="height:88px;width:88px;">
+            
+            <?php
+            }
+            ?>
+            
+            </a>
+        </div>                       
+        <div class="memb_info left">
+            <a href="<?php echo $this->baseUrl('account/profile'); ?>/<?php echo $user->getUsername()?>"> 
+            <span class="username"> 
+                <?php echo $user->getUsername()?>
+            </span>
+            </a>      
+            <div class="clear"></div>
+            <span>Category : <?php echo $user->getPrimaryCategory()->getCategoryTitle()?></span>
+            <span>Member since : <? echo date('d M Y', strtotime($user->getCreatedOn()))?></span>
+            <span>Rating : <?php echo $user->getRating();?></span>
+            <span>Projects Complete : <?php echo $user->getUserWorked()?></span>
+            <span>Location : <?php echo $user->getCountry();?></span>
+        </div>
+        <div class="clear"></div>
+    </div><!-- END rec_memb_box  (1) -->
+    
+    <?
+    }
+    ?>
+    
+    <div class="clear"></div>
+</div><!-- END reccommended_memb   -->

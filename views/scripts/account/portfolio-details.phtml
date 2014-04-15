@@ -1,0 +1,43 @@
+<div id="portfolio_iframe">
+    
+    <?php
+    if(isset($this->portfolioDetails) && !empty($this->portfolioDetails)) {
+    ?>
+    
+    <img class="member_profile_pic" src="<?php echo $this->baseUrl('images/profile_image') 
+                                                    . '/' . $this->portfolioDetails->getPortfolioImage();?>">
+    <div class="desc">
+        <h3><?php echo $this->portfolioDetails->getPortfolioTitle();?></h3>
+        <p><?php echo $this->portfolioDetails->getProjectDescription();?></p>
+        <p class="bold">
+            Website : <br />
+            Client :
+        </p>
+
+        <?php
+        $url = stripslashes($this->portfolioDetails->getprojectUrl());
+        $http = '';
+        if(substr($url, 0, 7)!='http://'){
+            $http = 'http://';
+        }
+        ?>
+
+        <p class="links">
+            <a href="<?php echo $http.$url;?>" target="_blank">
+                <?php echo $this->portfolioDetails->getProjectUrl();?>
+            </a>
+            <br />
+            <a href="<?php echo $http.$url;?>" target="_blank">
+                <?php echo $this->portfolioDetails->getClientName();?>
+            </a>
+        </p>
+
+    </div>
+
+<?php
+}
+?>
+
+</div>
+
+<?php $this->headLink()->appendStylesheet($this->baseUrl('styles/jquery.fancybox.css')) ?>

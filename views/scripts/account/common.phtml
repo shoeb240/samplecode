@@ -1,0 +1,24 @@
+<div class="right">
+    <div class="orange_button left" id="bookmark_user" 
+         style="display: <? if($this->getIfBookmarked <= 0){ echo '';} else {echo 'none';}?>">
+        <a href="javascript:void(0);" onclick="bookmark_user('<?php echo $this->userId;?>');">
+            BOOKMARK MEMBER<span>Bookmark this user!</span>
+        </a>
+    </div><!-- END blue_button   -->
+    <div class="purple_button left" id="cancel_bookmark" 
+         style="display: <? if($this->getIfBookmarked > 0){ echo '';} else {echo 'none';}?>">
+        <a href="javascript:void(0);" onclick="cancel_bookmark('<?php echo $this->userId;?>');">
+            CANCEL BOOKMARK<span>Remove this user from bookmark!</span>
+        </a>
+    </div> <!-- END gray_button   -->
+    <div class="clear"></div>	
+</div>
+<div class="clear"></div>
+
+<?php $this->headScript()->captureStart() ?>
+
+var baseUrl = '<?php echo $this->baseUrl('/'); ?>';
+    
+<?php $this->headScript()->captureEnd() ?>
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/bookmark-common.js')) ?>        

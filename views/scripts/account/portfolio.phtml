@@ -1,0 +1,110 @@
+<div id="container" class="my_account">
+    <a class="back_to left" href="<?php echo $this->baseUrl('account/profile') . '/' . $this->username?>"> 
+        &laquo; Back to profile
+    </a>
+    <div class="right">
+        
+    <?php
+    if($this->sessionUserId && $this->sessionUserId == $this->userId) {
+    ?>
+        
+    <div class="purple_button left">
+        <a href="<?php echo $this->baseUrl('account/add-portfolio')?>">
+            ADD ITEM<span>Add new project</span>
+        </a>
+    </div><!-- END gray_button   -->
+    
+    <?php
+    }
+    ?>
+    
+    </div>
+    <div class="clear"></div>
+
+    <div class="main_box portfolio">
+        <center><p style="color:red"><?php echo $this->error;?></p></center>
+        <center><p style="color:blue"><?php echo $this->message;?></p></center>
+        
+        <h3>CURRENT PORTFOLIO</h3>
+        <div style="clear: both;"></div>
+
+        <?php
+        if(!empty($this->portfolioList)) {
+            foreach ($this->portfolioList as $portfolio) {
+        ?>
+        
+        <div class="portfolio_wrap">
+        <a class="fancybox fancybox.iframe" href="<?php echo $this->baseUrl('account/portfolio-details') 
+                                                             . '/' . $portfolio->getPortfolioId();?>">
+            <img src="<?php echo $this->baseUrl('images/profile_image') 
+                                 . '/' . $portfolio->getPortfolioImage();?>">
+        </a>
+        
+        <?php
+        if($this->sessionUserId && $this->sessionUserId == $this->userId) {
+        ?>
+        
+        <p><a href="<?php echo $this->baseUrl('account/edit-portfolio') . '/' . $portfolio->getPortfolioId();?>">
+                Update
+           </a> 
+           | 
+           <a href="<?php echo $this->baseUrl('account/delete-portfolio') . '/' . $portfolio->getPortfolioId();?>" 
+               onclick="javascript:return confirm('Are you sure to delete?');">
+                Delete
+           </a>
+        </p>
+        
+        <?php
+        }
+        ?>
+        
+        <p><?php echo substr($portfolio->getProjectDescription(),0,75);?>...</p>
+        
+        <?php
+        $url = stripslashes($portfolio->getProjectUrl());
+        $http = '';
+        if(substr($url, 0, 7)!='http://') {
+            $http = 'http://';
+        }
+        ?>
+        
+        <p>
+            <b>Client :</b>
+            <a href="<?php echo $http.$url;?>" target="_blank">
+                <?php echo $portfolio->getClientName();?>
+            </a><br />
+            <b>URL : </b>
+            <a href="<?php echo $http.$url;?>" target="_blank">
+                <?php echo $portfolio->getProjectUrl();?>
+            </a>
+        </p>
+    </div>
+        
+    <?php
+        }
+    } else {
+    ?>
+        No record found.
+            
+    <?php
+    }
+    ?>
+        
+    <div class="clear"></div>
+    </div><!-- END main_box   -->
+</div><!-- END container   -->
+
+<?php $this->headScript()->appendFile($this->baseUrl('scripts/jquery.fancybox.pack.js')) ?>        
+<?php $this->headLink()->appendStylesheet($this->baseUrl('styles/jquery.fancybox.css')) ?>
+
+<?php $this->headScript()->captureStart() ?>
+
+    $(document).ready(function() {
+        $(".fancybox").fancybox({
+        'width': 830,
+        'autoScale': false,
+        'type': 'iframe'
+        });
+    });
+    
+<?php $this->headScript()->captureEnd() ?>
